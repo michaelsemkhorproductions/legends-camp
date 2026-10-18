@@ -241,13 +241,17 @@ em { font-family: var(--font-accent); font-style: italic; font-weight: 400; lett
 }
 @media (min-width: 700px) {
   .billboard {
-    aspect-ratio: 3296 / 698;
+    /* 15% taller than the clip's native 3296:698 ratio, so it reads bigger
+       without cropping anything: the extra height letterboxes against the
+       same blurred poster image instead of cutting off the edges. */
+    aspect-ratio: 3296 / 803;
     width: 100vw;
     max-width: 100vw;
     margin-left: calc(50% - 50vw);
     margin-right: calc(50% - 50vw);
     border-radius: 0;
   }
+  .billboard__media { object-fit: contain; }
   .billboard__tag { left: 20px; bottom: 20px; font-size: .8rem; }
 }
 
