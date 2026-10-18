@@ -240,7 +240,14 @@ em { font-family: var(--font-accent); font-style: italic; font-weight: 400; lett
   font-size: .75rem; font-weight: 600; color: #e9edf3;
 }
 @media (min-width: 700px) {
-  .billboard { aspect-ratio: 3296 / 698; }
+  .billboard {
+    aspect-ratio: 3296 / 698;
+    width: 100vw;
+    max-width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    border-radius: 0;
+  }
   .billboard__tag { left: 20px; bottom: 20px; font-size: .8rem; }
 }
 
