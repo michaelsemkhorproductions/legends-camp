@@ -1,5 +1,24 @@
 # The Legends Camp by Valdesoto — site
 
+## Handoff to Alex (2026-10-20)
+
+Jeff has approved the design and wants it live on `thelegendscamp.com` ASAP. This zip is the
+current, live-approved code — it's the same thing running at
+`https://michaelsemkhorproductions.github.io/legends-camp-seun/` right now, so you can compare
+against that at any time.
+
+**What's left before it's truly final:**
+- **Stripe** — Jeff said he'd send a Stripe link for the Sign Up / Register buttons "soon." Once
+  you have it, see "The one thing you'll want to change" below — it's one line in `js/main.js`
+  unless you want it wired into Semkhor's registration/reporting backend instead of a plain
+  link, in which case that's new work, not a config change.
+- **Price** — page shows $750+fees. Some earlier campaign material mentioned $850. Worth a
+  one-line confirmation from Jeff before this goes live for real.
+- **Domain** — up to you how you want to serve it on `thelegendscamp.com` (this repo is also on
+  GitHub under Michael's account if a straight `git clone` + custom-domain CNAME is easier than
+  working from the zip).
+- Everything else below is pre-existing build notes, still accurate.
+
 ## Revision notes (v2 — design polish, same content)
 
 Same sections, same order, same copy. Visual and practical refinements only:
@@ -57,8 +76,8 @@ only line that needs editing.
 - **Register destination** — see above. Not yet finalized in the Slack thread
   (Alex was still waiting on Jeff to open a Stripe account as of the last
   message I have).
-- **Countdown timer** — counts down to November 21, 2026, 9:00 AM Eastern.
-  Adjust `CAMP_START` in `js/main.js` if the actual start time differs.
+- **Countdown timer** — counts down to November 21, 2026, 8:00 AM Eastern
+  (first published session time). Adjust `CAMP_START` in `js/main.js` if that changes.
 - **Hero background** — currently uses the animated `video/hero-banner.mp4`
   John sent, with the static `Day_01` poster as the fallback/poster image. If
   you'd rather launch with just the static image, remove the `<video>` block
