@@ -1,4 +1,4 @@
-/* The Legends Camp by Valdesoto — stylesheet
+/* The Legends Camp — stylesheet
    Brand: navy, gold, ivory (matches the Week 1 campaign creative). */
 
 @font-face {
@@ -221,40 +221,6 @@ em { font-family: var(--font-accent); font-style: italic; font-weight: 400; lett
   .hero__grid { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 4rem; }
 }
 
-/* Billboard: the supplied wide banner video, shown uncropped */
-.billboard {
-  position: relative;
-  margin: clamp(40px, 5vw, 64px) 0 0;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  background: var(--navy-900) url("../images/hero-banner-poster.jpg") center/cover no-repeat;
-  box-shadow: 0 0 0 1px rgba(246,188,23,.25), 0 40px 80px -30px rgba(0,0,0,.7);
-  aspect-ratio: 16 / 9;
-}
-.billboard__media { width: 100%; height: 100%; object-fit: cover; object-position: center; }
-.billboard__tag {
-  position: absolute; left: 14px; bottom: 14px;
-  padding: .45em .9em; border-radius: 999px;
-  background: rgba(5,15,30,.72); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-  border: 1px solid rgba(255,255,255,.12);
-  font-size: .75rem; font-weight: 600; color: #e9edf3;
-}
-@media (min-width: 700px) {
-  .billboard {
-    /* 15% taller than the clip's native 3296:698 ratio, so it reads bigger
-       without cropping anything: the extra height letterboxes against the
-       same blurred poster image instead of cutting off the edges. */
-    aspect-ratio: 3296 / 803;
-    width: 100vw;
-    max-width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
-    border-radius: 0;
-  }
-  .billboard__media { object-fit: contain; }
-  .billboard__tag { left: 20px; bottom: 20px; font-size: .8rem; }
-}
-
 /* ---------- About ---------- */
 .about { background: var(--paper); }
 .about__grid { display: grid; gap: 2.5rem; }
@@ -317,7 +283,11 @@ em { font-family: var(--font-accent); font-style: italic; font-weight: 400; lett
 @media (min-width: 1040px) { .coach-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1.25rem; } }
 
 /* ---------- Experience ---------- */
-.experience { background: var(--ivory); }
+.experience {
+  background: linear-gradient(120deg, #e7b634 0%, #f3d16b 55%, #e8b63b 100%);
+  color: var(--navy-950);
+}
+.experience .chip { background: rgba(255,255,255,.24); border-color: rgba(5,15,30,.24); color: var(--navy-900); }
 .experience__grid { display: grid; gap: 2.5rem; align-items: center; }
 .media-frame { position: relative; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); aspect-ratio: 16 / 9; background: var(--navy-900); }
 .media-frame img { width: 100%; height: 100%; object-fit: cover; }
@@ -338,16 +308,25 @@ em { font-family: var(--font-accent); font-style: italic; font-weight: 400; lett
 .video-wrap[hidden] { display: none; }
 .video-wrap video { width: auto; max-width: 100%; max-height: 78vh; aspect-ratio: 9 / 16; border-radius: var(--radius-lg); background: #000; box-shadow: var(--shadow); }
 
-.experience__copy h2 em { color: var(--gold-deep); }
-.experience__lede { font-size: 1.1rem; color: #2a3546; margin-top: 1.25rem; }
+.experience__copy h2 em { color: var(--navy-900); }
+.experience__lede { font-size: 1.1rem; color: var(--navy-900); margin-top: 1.25rem; }
 .disclaimer { font-size: .84rem; color: var(--muted); border-left: 2px solid var(--gold); padding-left: .9em; margin: 1.5rem 0 0; max-width: 52ch; }
+.experience .disclaimer { color: var(--navy-900); border-left-color: #8a650c; }
 
 @media (min-width: 900px) {
   .experience__grid { grid-template-columns: 1fr 1fr; gap: 5rem; }
 }
 
 /* ---------- Features ---------- */
-.features { background: var(--paper); }
+.features {
+  background: linear-gradient(rgba(3,31,20,.70), rgba(3,31,20,.64)), url('../images/soccer-turf.webp') center / cover no-repeat;
+  background-color: #0c3927;
+  color: var(--white);
+}
+.features .chip { background: rgba(3,31,20,.66); border-color: rgba(255,255,255,.3); color: var(--white); }
+.features .section-head h2 em { color: var(--gold); }
+.features .section-head__aside { color: #e5eee9; }
+.features .feature { color: var(--ink); }
 .feature-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
 .feature {
   background: var(--white); border: 1px solid var(--line); border-radius: var(--radius);
@@ -483,4 +462,150 @@ em { font-family: var(--font-accent); font-style: italic; font-weight: 400; lett
 @media (prefers-reduced-motion: reduce) {
   .js .reveal { opacity: 1; transform: none; transition: none; }
   *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
+
+/* Revised campaign opening, preserving the original page's visual system. */
+[hidden] { display: none !important; }
+.brand__mark { width: 56px; height: 56px; object-fit: contain; }
+.hero { min-height: 700px; padding-block: 64px 100px; background: linear-gradient(90deg,rgba(5,15,30,.88) 0%,rgba(5,15,30,.70) 45%,rgba(5,15,30,.18) 100%),url('../images/stadium-sarasota.webp') center center/cover no-repeat; }
+.hero__grid { min-height: 515px; align-items: center; }
+.hero h1 { max-width: 14ch; font-size: clamp(2.6rem,1.4rem + 4.2vw,4.7rem); }
+.hero__lede { color: #f1f2f5; }
+.hero__panel { background: rgba(5,15,30,.86); border-color: rgba(255,255,255,.25); backdrop-filter: blur(8px); }
+.hero .chip { background: rgba(5,15,30,.7); }
+.about__crest { width: 176px; }
+.experience { padding-block: 72px; }
+.experience__grid { gap: 3rem; }
+.media-frame[hidden] { display: none; }
+.media-frame picture { display: block; width: 100%; height: 100%; }
+.video-wrap video { width: 100%; height: auto; max-height: none; aspect-ratio: 908 / 512; object-fit: contain; }
+.coach-card__media { aspect-ratio: 4 / 5; border-radius: 12px; }
+.coach-card__media picture { display: block; width: 100%; height: 100%; }
+.coach-card__media img { object-fit: contain; }
+.coach-card:hover .coach-card__media img { transform: none; }
+.coach-specialty { color: var(--gold); font-size: .78rem; margin: .35rem 0 0; font-weight: 700; }
+.sponsors { background: #030303; border-top-color: rgba(246,188,23,.4); }
+.sponsors__title { color: #d6d6d6; }
+.sponsors__row { gap: 2rem 3.5rem; }
+.sponsors__row img { height: 76px; max-width: 185px; }
+.sponsors__row img[src*="usm"],.sponsors__row img[src*="trainelite"] { width: 160px; height: 72px; }
+.site-footer__brand img { width: 56px; height: 56px; }
+.faq__contact a { white-space: normal; overflow-wrap: anywhere; }
+@media (max-width: 979px) {
+  .hero { min-height: auto; padding-block: 44px 64px; background-position: center; }
+  .hero__grid { min-height: 0; }
+  .hero h1 { max-width: 16ch; }
+  .hero__panel { max-width: 580px; }
+}
+@media (max-width: 420px) {
+ .brand__text { font-size: .9rem; }
+ .hero__actions { gap: .8rem; }
+ .hero__actions .btn--line { padding-inline: 1.2em; }
+ .btn-split__label { padding-inline: 1.15em; }
+ .play-btn { left: 10px; bottom: 10px; font-size: .8rem; }
+ .coach-card__name { font-size: .98rem; }
+ .sponsors__row { gap: 1.75rem; }
+}
+
+/* Supplied David Chorro cover, displayed without cropping. */
+#archiveFrame { aspect-ratio: 1459 / 1179; }
+#archiveFrame img { object-fit: contain; }
+
+
+/* Approved horizontal header: original emblem and outlined wordmark. */
+.brand { flex-shrink: 0; gap: .65rem; }
+.brand .brand__mark { width: 47px; height: 60px; object-fit: contain; }
+.brand__wordmark { display: block; width: 150px; height: auto; }
+
+/* Additional original photographs retain their complete framing. */
+.gallery-more { columns: 2; column-gap: .75rem; margin-top: .75rem; }
+.gallery-more__item { break-inside: avoid; margin: 0 0 .75rem; border-radius: var(--radius); overflow: hidden; background: var(--line); }
+.gallery-more__item a { display: block; }
+.gallery-more__item img { display: block; width: 100%; height: auto; }
+.gallery-more__item a:focus-visible { outline: 3px solid var(--gold); outline-offset: -3px; }
+@media (min-width: 700px) { .gallery-more { columns: 3; } }
+@media (min-width: 1100px) {
+  .gallery-more { columns: 4; column-gap: 1rem; margin-top: 1rem; }
+  .gallery-more__item { margin-bottom: 1rem; }
+}
+@media (max-width: 360px) {
+  .brand .brand__mark { width: 40px; height: 52px; }
+  .brand__wordmark { width: 134px; }
+}
+
+
+/* Let the stadium show through, with compact opaque tiles for readability. */
+.hero__panel { background: transparent; border-color: transparent; box-shadow: none; backdrop-filter: none; }
+.countdown { border-bottom: 0; padding-bottom: 0; }
+.countdown__title { display: table; background: var(--navy-950); color: #fff; padding: .5rem .7rem; border-radius: var(--radius-sm); }
+.countdown__unit { background: var(--navy-950); }
+.glance { gap: .6rem; }
+.glance > div { background: var(--navy-950); padding: .65rem .75rem; border-radius: var(--radius-sm); }
+
+/* Each coach stays together at every screen size. */
+.gallery-coach-group + .gallery-coach-group { margin-top: 1rem; }
+.gallery-coach-grid { display: flex; flex-wrap: wrap; gap: .75rem; align-items: flex-start; }
+.gallery-coach-photo { flex: 0 0 calc((100% - .75rem) / 2); min-width: 0; margin: 0; border-radius: var(--radius); overflow: hidden; background: var(--line); }
+.gallery-coach-photo a, .gallery-coach-photo picture, .gallery-coach-photo img { display: block; width: 100%; }
+.gallery-coach-photo img { height: auto; object-fit: contain; }
+.gallery-coach-photo a:focus-visible { outline: 3px solid var(--gold); outline-offset: -3px; }
+@media (min-width: 700px) { .gallery-coach-photo { flex-basis: calc((100% - 1.5rem) / 3); } }
+@media (min-width: 1100px) {
+ .gallery-coach-grid { gap: 1rem; }
+ .gallery-coach-photo { flex-basis: calc((100% - 3rem) / 4); }
+}
+
+
+/* Start the camp introduction beside the crest, including on phones. */
+.about__lead { display: flow-root; }
+.about__lead .about__crest { float: left; width: clamp(96px, 22vw, 150px); height: auto; margin: 0 1.1rem .65rem 0; }
+.about__lead p { margin-top: 0; }
+
+/* One uninterrupted photo sequence, with fully framed, justified rows. */
+.gallery-stream { display: flex; flex-wrap: wrap; gap: 12px; }
+.gallery-photo { flex: var(--photo-ratio) 1 calc(var(--photo-ratio) * 180px); min-width: 0; margin: 0; border-radius: var(--radius); overflow: hidden; }
+.gallery-photo a, .gallery-photo picture, .gallery-photo img { display: block; width: 100%; }
+.gallery-photo img { height: auto; }
+.gallery-photo a:focus-visible { outline: 3px solid var(--gold); outline-offset: -3px; }
+.gallery-stream.is-justified { display: flex; flex-direction: column; flex-wrap: nowrap; }
+.gallery-row { display: flex; gap: 12px; width: 100%; }
+.gallery-row .gallery-photo { flex: var(--photo-ratio) 1 0; height: 100%; }
+.gallery-row .gallery-photo a, .gallery-row .gallery-photo picture, .gallery-row .gallery-photo img { height: 100%; }
+.gallery-row .gallery-photo img { object-fit: contain; }
+
+
+/* V2 opening only: the original coach photographs flank the central actions. */
+.hero--v2 { padding-bottom: 28px; }
+.hero--v2 .hero__grid { min-height: 0; row-gap: 1rem; }
+.hero--v2 .hero__lede { margin-bottom: .5rem; }
+.hero--v2 .hero__copy { order: 1; }
+.hero--v2 .hero__panel { order: 2; }
+.hero--v2 .hero__coach-banner {
+  order: 3; grid-column: 1 / -1;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(200px, .72fr) minmax(0, 1fr);
+  align-items: center; gap: clamp(12px, 2vw, 28px);
+}
+.hero--v2 .hero__coach-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; gap: 4px; }
+.hero--v2 .hero__portrait { min-width: 0; margin: 0; }
+.hero--v2 .hero__portrait svg { display: block; width: 100%; height: auto; overflow: hidden; }
+.hero--v2 .hero__actions { flex-direction: column; flex-wrap: nowrap; justify-content: center; align-items: center; gap: 1rem; margin: 0; }
+.hero--v2 .hero__actions > a { width: 200px; justify-content: center; }
+.hero--v2 .hero__actions .btn-split__label { width: 100%; justify-content: center; }
+.hero--v2 .hero__actions .btn--line { background: rgba(5,15,30,.72); }
+.hero--v2 .hero__actions .btn--line:hover { background: var(--navy-900); }
+@media (max-width: 979px) {
+  .hero--v2 .hero__coach-banner { order: 2; }
+  .hero--v2 .hero__panel { order: 3; }
+}
+@media (max-width: 639px) {
+  .hero--v2 .hero__coach-banner {
+    grid-template-columns: minmax(0, 1fr) 144px minmax(0, 1fr);
+    margin-inline: -12px; gap: 8px;
+  }
+  .hero--v2 .hero__coach-pair { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .hero--v2 .hero__portrait { width: 100%; max-width: 132px; justify-self: center; }
+  .hero--v2 .hero__actions { gap: .8rem; }
+  .hero--v2 .hero__actions > a { width: 144px; }
+  .hero--v2 .hero__actions .btn-split__label { height: 52px; font-size: .9rem; padding-inline: .7em; }
+  .hero--v2 .hero__actions .btn--line { height: 52px; font-size: .82rem; padding-inline: .7em; }
 }

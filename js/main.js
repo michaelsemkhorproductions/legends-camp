@@ -81,13 +81,6 @@
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // Respect reduced-motion: pause the hero banner video
-  var heroVideo = document.querySelector(".billboard__media");
-  if (heroVideo && reduceMotion) {
-    heroVideo.removeAttribute("autoplay");
-    heroVideo.pause();
-  }
-
   // Reveal-on-scroll + mobile sticky Register bar
   if ("IntersectionObserver" in window) {
     var revealIO = new IntersectionObserver(function (entries) {
