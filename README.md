@@ -12,6 +12,10 @@ then payment. Validation runs in the browser: required fields, email, 5-digit ZI
 There's an error summary with links to each problem field. The page sends nothing and
 stores nothing in the browser.
 
+The State and T-shirt dropdowns are styled listboxes (keyboard: arrows, Home/End, type-ahead,
+Enter, Esc). Each one drives a hidden native `<select>` that keeps the same `name`, so
+FormData and autofill still work. The 01/02/03 step chips in the hero jump to their sections.
+
 **Alex — hook points:**
 - `window.LegendsRegistration.submit = function (data) { return Promise }` in
   `js/register.js`. It is called with the validated object below. Resolve the promise when
@@ -20,7 +24,7 @@ stores nothing in the browser.
 - Mount Stripe's payment fields into `#payment-element`. Its contents are a placeholder.
 - Data keys: `parent_first_name, parent_last_name, address, city, state (2-letter), zip,
   mobile_phone (10 digits), email (lowercased), player_first_name, player_last_name,
-  player_birthdate (YYYY-MM-DD), player_sex (M|F), player_tshirt_size
+  player_birthdate (typed as DD/MM/YYYY, sent as YYYY-MM-DD), player_sex (M|F), player_tshirt_size
   (YS|YM|YL|YXL|AS|AM|AL|AXL)`.
 
 **Not confirmed with Jeff yet:** the t-shirt size list (my default), the price ($750 +

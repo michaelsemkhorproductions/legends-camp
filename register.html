@@ -56,9 +56,9 @@
       <h1>Register your <em>player</em></h1>
       <p class="reg-hero__lede">Groups are capped at 12 players. Fill in your details and your player’s, then complete payment to secure the spot.</p>
       <ol class="reg-steps" aria-label="Registration steps">
-        <li><span>01</span>Parent or guardian</li>
-        <li><span>02</span>Player</li>
-        <li><span>03</span>Payment</li>
+        <li><a href="#step-parent" data-step="step-parent"><span>01</span>Parent or guardian</a></li>
+        <li><a href="#step-player" data-step="step-player"><span>02</span>Player</a></li>
+        <li><a href="#step-payment" data-step="step-payment"><span>03</span>Payment</a></li>
       </ol>
     </div>
   </section>
@@ -73,7 +73,7 @@
           <ul class="reg-alert__list" id="regErrorList"></ul>
         </div>
 
-        <fieldset class="reg-card">
+        <fieldset class="reg-card" id="step-parent" tabindex="-1">
           <legend class="reg-card__head">
             <span class="reg-card__num">01</span>
             <span class="reg-card__title">Parent or <em>guardian</em></span>
@@ -101,7 +101,7 @@
             </div>
             <div class="field">
               <label for="state">State</label>
-              <select id="state" name="state" autocomplete="address-level1" required>
+              <select id="state" name="state" autocomplete="address-level1" required data-dropdown>
                 <option value="">Select…</option>
                 <option value="AL">Alabama</option><option value="AK">Alaska</option><option value="AZ">Arizona</option>
                 <option value="AR">Arkansas</option><option value="CA">California</option><option value="CO">Colorado</option>
@@ -139,7 +139,7 @@
           </div>
         </fieldset>
 
-        <fieldset class="reg-card">
+        <fieldset class="reg-card" id="step-player" tabindex="-1">
           <legend class="reg-card__head">
             <span class="reg-card__num">02</span>
             <span class="reg-card__title">Your <em>player</em></span>
@@ -158,12 +158,12 @@
 
             <div class="field">
               <label for="birthdate">Birthdate</label>
-              <input id="birthdate" name="player_birthdate" type="date" required min="2010-01-01" max="2018-12-31" aria-describedby="birthdateHint">
-              <p class="field__hint" id="birthdateHint">For players born 2010–2018 (U8–U17).</p>
+              <input id="birthdate" name="player_birthdate" type="text" inputmode="numeric" autocomplete="off" required maxlength="10" placeholder="DD/MM/YYYY" data-min="2010-01-01" data-max="2018-12-31" aria-describedby="birthdateHint">
+              <p class="field__hint" id="birthdateHint">DD/MM/YYYY · for players born 2010–2018 (U8–U17).</p>
             </div>
             <div class="field">
               <label for="shirtSize">T-shirt size</label>
-              <select id="shirtSize" name="player_tshirt_size" required>
+              <select id="shirtSize" name="player_tshirt_size" required data-dropdown>
                 <option value="">Select…</option>
                 <optgroup label="Youth">
                   <option value="YS">Youth S</option>
@@ -190,7 +190,7 @@
           </div>
         </fieldset>
 
-        <fieldset class="reg-card reg-card--pay">
+        <fieldset class="reg-card reg-card--pay" id="step-payment" tabindex="-1">
           <legend class="reg-card__head">
             <span class="reg-card__num">03</span>
             <span class="reg-card__title"><em>Payment</em></span>
