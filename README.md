@@ -1,6 +1,37 @@
-# The Legends Camp by Valdesoto — site
+# The Legends Camp — site
 
-## 2026-10-20 — now running Jeff's "v2" build
+## 2026-10-21 — replaced the mirror with Jeff's real V2 export
+
+Jeff sent the actual project export from the ChatGPT site builder
+(`The-Legends-Camp-V2`, source commit `cae92a3`, exported 2026-10-21). This repo is now
+byte-identical to that export's `dist/` folder (only this README is ours). Compared with the
+2026-10-20 mirror, two things changed:
+
+- **Removed a Cloudflare challenge script** that the HTTP mirror had picked up from the
+  ChatGPT host. It was never part of Jeff's source and would have tried to load
+  `/cdn-cgi/...` from whatever server hosts the page.
+- **Added `images/soccer-turf.webp`**, the background of the "What your player gets" section.
+  The CSS referenced it, but the mirror never fetched it, so that section had no turf.
+  `experience-real.jpg` and `sponsor-valdesoto.png` were also added. They aren't referenced
+  yet; Jeff's export keeps them as retained assets.
+
+Entry point is still `index.html` at the repo root (the export's `dist/` contents sit here
+directly). `REGISTER_URL` and `CAMP_START` are in `js/main.js`; the four no-JS fallback
+links in `index.html` also point at the old register page.
+
+**For Alex — registration moves onto this site.** Per Alex and David in Slack (2026-10-20),
+registration will be a form on this site, processed by Semkhor with Stripe direct payments,
+instead of linking to lakewoodranchfc.org. Alex is handling the Stripe and server
+connections. Fields Jeff asked for: parent first and last name, address, city, state, zip
+code, mobile phone, and email; player first and last name, birthdate, sex (M/F), and t-shirt
+size. No form exists in this build yet; the Sign up buttons still link out. Nothing here
+contains API keys or secrets.
+
+**Performance note:** each of the five `coach-*.webp` images is 1.5–1.8 MB as exported. They
+could be resized to their display size before going live. This hasn't been changed, to
+keep the repo identical to Jeff's export.
+
+## 2026-10-20 — now running Jeff's "v2" build (mirror; superseded above)
 
 Jeff used ChatGPT's site-publishing tool to produce his own revision of this site, starting
 from our code (confirmed with Michael — not an unrelated third party's work). Per his
