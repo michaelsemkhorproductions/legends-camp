@@ -1,5 +1,32 @@
 # The Legends Camp — site
 
+## 2026-10-21 — registration form page (layout done; Alex wires Stripe + API)
+
+New files: `register.html`, `css/register.css`, `js/register.js`. Every Register / Sign up
+button now goes to `register.html` (`REGISTER_URL` in `js/main.js`, plus the no-JS `href`s
+in `index.html`). Jeff's original files are otherwise untouched.
+
+The form collects exactly the fields Jeff listed, in three steps: parent or guardian, player,
+then payment. Validation runs in the browser: required fields, email, 5-digit ZIP, a
+10-digit US mobile number, and a birthdate between 2010 and 2018 (the range the site states).
+There's an error summary with links to each problem field. The page sends nothing and
+stores nothing in the browser.
+
+**Alex — hook points:**
+- `window.LegendsRegistration.submit = function (data) { return Promise }` in
+  `js/register.js`. It is called with the validated object below. Resolve the promise when
+  payment clears to show the success panel; reject it with an `Error` whose message is safe to
+  show the parent. If no handler is set, the page says registration isn't connected yet.
+- Mount Stripe's payment fields into `#payment-element`. Its contents are a placeholder.
+- Data keys: `parent_first_name, parent_last_name, address, city, state (2-letter), zip,
+  mobile_phone (10 digits), email (lowercased), player_first_name, player_last_name,
+  player_birthdate (YYYY-MM-DD), player_sex (M|F), player_tshirt_size
+  (YS|YM|YL|YXL|AS|AM|AL|AXL)`.
+
+**Not confirmed with Jeff yet:** the t-shirt size list (my default), the price ($750 +
+processing, as on the site), one player per registration (no "add a sibling"), and whether
+he needs a waiver, medical or emergency-contact fields, or a parent-consent checkbox.
+
 ## 2026-10-21 — replaced the mirror with Jeff's real V2 export
 
 Jeff sent the actual project export from the ChatGPT site builder

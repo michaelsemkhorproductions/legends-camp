@@ -3,10 +3,10 @@
 
   // ---------------------------------------------------------------------
   // SINGLE PLACE TO EDIT: where every Register / Sign up button sends people.
-  // Default: Jeff's existing registration page. Swap to a Semkhor-hosted
-  // registration URL later if/when that integration is confirmed.
+  // Default: this site's own registration page (Semkhor + Stripe, per Alex and
+  // David). Jeff's old page was https://www.lakewoodranchfc.org/the-legends-camp
   // ---------------------------------------------------------------------
-  var REGISTER_URL = "https://www.lakewoodranchfc.org/the-legends-camp";
+  var REGISTER_URL = "register.html";
 
   // Camp start for the countdown: Sat Nov 21, 2026, 8:00 AM Eastern
   // (first session per the published schedule: 8:00–10:00am).
@@ -19,6 +19,9 @@
     if (/^https?:/.test(REGISTER_URL)) {
       el.setAttribute("target", "_blank");
       el.setAttribute("rel", "noopener");
+    } else {
+      el.removeAttribute("target");
+      el.removeAttribute("rel");
     }
   });
 
