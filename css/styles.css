@@ -626,3 +626,6 @@ em { font-family: var(--font-accent); font-style: italic; font-weight: 400; lett
 @media (max-width: 379px) {
   .btn-split--xl .btn-split__label { padding: 0 1.3em; font-size: 1rem; white-space: nowrap; }
 }
+@media (max-width: 379px) {
+  .price { flex-wrap: wrap; row-gap: .35rem; }
+}

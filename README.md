@@ -28,7 +28,7 @@ FormData and autofill still work. The 01/02/03 step chips in the hero jump to th
   (YS|YM|YL|YXL|AS|AM|AL|AXL)`.
 
 **Not confirmed with Jeff yet:** the t-shirt size list (my default), the price ($750 +
-processing, as on the site), one player per registration (no "add a sibling"), and whether
+3% credit card fee, as on the site), one player per registration (no "add a sibling"), and whether
 he needs a waiver, medical or emergency-contact fields, or a parent-consent checkbox.
 
 ## 2026-10-21 — replaced the mirror with Jeff's real V2 export
@@ -86,7 +86,7 @@ HTTP fetch — nothing hand-altered except what's noted below.
   you have it, see "The one thing you'll want to change" below — it's one line in `js/main.js`
   unless you want it wired into Semkhor's registration/reporting backend instead of a plain
   link, in which case that's new work, not a config change.
-- **Price** — page shows $750 (+processing). Some earlier campaign material mentioned $850.
+- **Price** — page shows $750 (+ 3% credit card fee). Some earlier campaign material mentioned $850.
   Worth a one-line confirmation from Jeff before this goes live for real.
 - **Domain** — Alex is handling deployment to `thelegendscamp.com`; this repo on GitHub under
   Michael's account is the handoff point.
