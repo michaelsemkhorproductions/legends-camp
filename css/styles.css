@@ -616,3 +616,13 @@ em { font-family: var(--font-accent); font-style: italic; font-weight: 400; lett
   .site-footer__links a { display: inline-flex; align-items: center; min-height: 44px; }
   .faq__contact a { display: inline-block; padding-block: .3rem; }
 }
+/* Keep the dated chips on one line on small phones. */
+@media (max-width: 420px) {
+  .register-card .chip, .hero .chip { font-size: .72rem; padding-inline: .8em; white-space: nowrap; }
+}
+@media (max-width: 379px) {
+  .register-card .chip__place { display: none; }
+}
+@media (max-width: 379px) {
+  .btn-split--xl .btn-split__label { padding: 0 1.3em; font-size: 1rem; white-space: nowrap; }
+}

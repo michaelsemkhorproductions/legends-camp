@@ -280,3 +280,7 @@
 
 /* The registration page has no sticky CTA, so the footer needs no extra room. */
 @media (max-width: 899px) { .page-register .site-footer { padding-bottom: 32px; } }
+
+@media (max-width: 420px) {
+  .reg-hero .chip { font-size: .72rem; padding-inline: .8em; white-space: nowrap; }
+}
