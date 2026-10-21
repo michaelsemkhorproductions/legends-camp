@@ -2,20 +2,26 @@
   "use strict";
 
   // Fit every row without cropping or leaving a partial coach row empty.
-  function planRows(ratios, width, targetHeight, gap) {
+  // maxPerRow and minWidth are optional: on phones they stop tall portraits
+  // from being squeezed into thin slivers.
+  function planRows(ratios, width, targetHeight, gap, maxPerRow, minWidth) {
     var count = ratios.length;
     var costs = Array(count + 1).fill(Infinity);
     var previous = Array(count + 1).fill(-1);
+    maxPerRow = maxPerRow || 8;
     costs[0] = 0;
     for (var end = 1; end <= count; end++) {
       var sum = 0;
-      for (var start = end - 1; start >= Math.max(0, end - 8); start--) {
+      var narrowest = Infinity;
+      for (var start = end - 1; start >= Math.max(0, end - maxPerRow); start--) {
         sum += ratios[start];
+        narrowest = Math.min(narrowest, ratios[start]);
         var length = end - start;
         var height = (width - gap * (length - 1)) / sum;
         if (height <= 0) continue;
         var deviation = (height - targetHeight) / targetHeight;
-        var cost = costs[start] + deviation * deviation * length + (length === 1 && count > 1 ? 4 : 0);
+        var thin = minWidth && height * narrowest < minWidth ? 6 * (1 - (height * narrowest) / minWidth) : 0;
+        var cost = costs[start] + deviation * deviation * length + thin + (length === 1 && count > 1 ? 4 : 0);
         if (cost < costs[end]) { costs[end] = cost; previous[end] = start; }
       }
     }
@@ -43,9 +49,12 @@
     var width = gallery.clientWidth;
     if (!width || Math.abs(width - lastWidth) < 1) return;
     lastWidth = width;
-    var target = width < 600 ? 170 : width < 900 ? 210 : 240;
+    var phone = width < 600;
+    var target = phone ? 200 : width < 900 ? 210 : 240;
+    var gap = phone ? 8 : 12;
     var fragment = document.createDocumentFragment();
-    planRows(ratios, width, target, 12).forEach(function (row) {
+    gallery.style.setProperty("--gallery-gap", gap + "px");
+    planRows(ratios, width, target, gap, phone ? 3 : 8, phone ? 120 : 0).forEach(function (row) {
       var element = document.createElement("div");
       element.className = "gallery-row";
       element.style.height = row.height + "px";

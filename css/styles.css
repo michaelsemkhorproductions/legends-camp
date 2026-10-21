@@ -567,8 +567,8 @@ em { font-family: var(--font-accent); font-style: italic; font-weight: 400; lett
 .gallery-photo a, .gallery-photo picture, .gallery-photo img { display: block; width: 100%; }
 .gallery-photo img { height: auto; }
 .gallery-photo a:focus-visible { outline: 3px solid var(--gold); outline-offset: -3px; }
-.gallery-stream.is-justified { display: flex; flex-direction: column; flex-wrap: nowrap; }
-.gallery-row { display: flex; gap: 12px; width: 100%; }
+.gallery-stream.is-justified { display: flex; flex-direction: column; flex-wrap: nowrap; gap: var(--gallery-gap, 12px); }
+.gallery-row { display: flex; gap: var(--gallery-gap, 12px); width: 100%; }
 .gallery-row .gallery-photo { flex: var(--photo-ratio) 1 0; height: 100%; }
 .gallery-row .gallery-photo a, .gallery-row .gallery-photo picture, .gallery-row .gallery-photo img { height: 100%; }
 .gallery-row .gallery-photo img { object-fit: contain; }
@@ -608,4 +608,11 @@ em { font-family: var(--font-accent); font-style: italic; font-weight: 400; lett
   .hero--v2 .hero__actions > a { width: 144px; }
   .hero--v2 .hero__actions .btn-split__label { height: 52px; font-size: .9rem; padding-inline: .7em; }
   .hero--v2 .hero__actions .btn--line { height: 52px; font-size: .82rem; padding-inline: .7em; }
+}
+
+/* Mobile fixes (2026-10-21). */
+.faq__contact a[href^="sms:"] { white-space: nowrap; }
+@media (max-width: 899px) {
+  .site-footer__links a { display: inline-flex; align-items: center; min-height: 44px; }
+  .faq__contact a { display: inline-block; padding-block: .3rem; }
 }
