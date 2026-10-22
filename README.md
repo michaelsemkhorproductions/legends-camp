@@ -1,5 +1,14 @@
 # The Legends Camp — site
 
+## 2026-10-22 — link-preview image
+
+Shared links now show the David Chorro / Cristiano Ronaldo photo, as Jeff asked:
+`images/share-david-ronaldo.jpg`, 1200×630 JPEG. JPEG is used because iMessage doesn't show
+WebP previews. The share tags in `index.html` and `register.html` use absolute URLs on the
+GitHub Pages preview. **When the site moves to its final domain, replace
+`https://michaelsemkhorproductions.github.io/legends-camp/` in those tags** (og:image,
+og:url, twitter:image).
+
 ## 2026-10-21 — registration form page (layout done; Alex wires Stripe + API)
 
 New files: `register.html`, `css/register.css`, `js/register.js`. Every Register / Sign up
