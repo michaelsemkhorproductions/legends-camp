@@ -10,7 +10,7 @@ The form collects exactly the fields Jeff listed, in three steps: parent or guar
 then payment. Validation runs in the browser: required fields, email, 5-digit ZIP, a
 10-digit US mobile number, and a real birthdate. Per Jeff (2026-10-22), nobody is blocked by
 age: the birthdate only catches typos (years 2006–2021), and parents also pick a "Current team
-age group" (U9–U17), because of the Aug 1 cutoff and kids who play up. There is no cap per group
+age group" (U8–U17), because of the Aug 1 cutoff and kids who play up. There is no cap per group
 for now.
 There's an error summary with links to each problem field. The page sends nothing and
 stores nothing in the browser.
@@ -27,7 +27,7 @@ FormData and autofill still work. The 01/02/03 step chips in the hero jump to th
 - Mount Stripe's payment fields into `#payment-element`. Its contents are a placeholder.
 - Data keys: `parent_first_name, parent_last_name, address, city, state (2-letter), zip,
   mobile_phone (10 digits), email (lowercased), player_first_name, player_last_name,
-  player_birthdate (typed as DD/MM/YYYY, sent as YYYY-MM-DD), player_team_age_group (U9…U17, or NONE = not on a team), player_sex (M|F), player_tshirt_size
+  player_birthdate (typed as DD/MM/YYYY, sent as YYYY-MM-DD), player_team_age_group (U8…U17, or NONE = not on a team), player_sex (M|F), player_tshirt_size
   (YS|YM|YL|YXL|AS|AM|AL|AXL)`.
 
 **Not confirmed with Jeff yet:** the t-shirt size list (my default), the price ($750 +
