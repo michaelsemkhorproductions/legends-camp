@@ -144,7 +144,7 @@
             <span class="reg-card__num">02</span>
             <span class="reg-card__title">Your <em>player</em></span>
           </legend>
-          <p class="reg-card__intro">The birthdate places your player in the right age group. Session times are assigned by age group after registration.</p>
+          <p class="reg-card__intro">Birthdate and current team age group help us place your player in the right group. Session times are assigned after registration.</p>
 
           <div class="reg-grid">
             <div class="field">
@@ -158,7 +158,23 @@
 
             <div class="field">
               <label for="birthdate">Birthdate</label>
-              <input id="birthdate" name="player_birthdate" type="text" inputmode="numeric" autocomplete="off" required maxlength="10" placeholder="DD/MM/YYYY" data-min="2010-01-01" data-max="2018-12-31">
+              <input id="birthdate" name="player_birthdate" type="text" inputmode="numeric" autocomplete="off" required maxlength="10" placeholder="DD/MM/YYYY" data-min="2006-01-01" data-max="2021-12-31">
+            </div>
+            <div class="field">
+              <label for="teamAge">Current team age group</label>
+              <select id="teamAge" name="player_team_age_group" required data-dropdown>
+                <option value="">Select…</option>
+                <option value="U9">U9</option>
+                <option value="U10">U10</option>
+                <option value="U11">U11</option>
+                <option value="U12">U12</option>
+                <option value="U13">U13</option>
+                <option value="U14">U14</option>
+                <option value="U15">U15</option>
+                <option value="U16">U16</option>
+                <option value="U17">U17</option>
+              </select>
+              <p class="field__hint">The age group your player plays in now.</p>
             </div>
             <div class="field">
               <label for="shirtSize">T-shirt size</label>
@@ -179,7 +195,7 @@
               </select>
             </div>
 
-            <fieldset class="field field--full choice" id="sexGroup">
+            <fieldset class="field choice" id="sexGroup">
               <legend>Sex</legend>
               <div class="choice__row">
                 <label class="choice__opt"><input type="radio" name="player_sex" value="F" required><span>Female</span></label>

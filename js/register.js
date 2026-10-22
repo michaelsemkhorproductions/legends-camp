@@ -223,6 +223,7 @@
     player_first_name: "Player first name",
     player_last_name: "Player last name",
     player_birthdate: "Birthdate",
+    player_team_age_group: "Current team age group",
     player_tshirt_size: "T-shirt size",
     player_sex: "Sex"
   };
@@ -251,7 +252,7 @@
           ? "That date doesn’t exist. Check the day and month (DD/MM/YYYY)."
           : "Enter the date as DD/MM/YYYY, for example 09/03/2014.";
       }
-      if (iso < el.getAttribute("data-min") || iso > el.getAttribute("data-max")) return "The camp is for players born 2010–2018.";
+      if (iso < el.getAttribute("data-min") || iso > el.getAttribute("data-max")) return "Please check the birthdate. Is the year right?";
     }
     return "";
   }
