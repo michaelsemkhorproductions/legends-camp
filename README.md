@@ -27,7 +27,7 @@ FormData and autofill still work. The 01/02/03 step chips in the hero jump to th
 - Mount Stripe's payment fields into `#payment-element`. Its contents are a placeholder.
 - Data keys: `parent_first_name, parent_last_name, address, city, state (2-letter), zip,
   mobile_phone (10 digits), email (lowercased), player_first_name, player_last_name,
-  player_birthdate (typed as DD/MM/YYYY, sent as YYYY-MM-DD), player_team_age_group (U9…U17), player_sex (M|F), player_tshirt_size
+  player_birthdate (typed as DD/MM/YYYY, sent as YYYY-MM-DD), player_team_age_group (U9…U17, or NONE = not on a team), player_sex (M|F), player_tshirt_size
   (YS|YM|YL|YXL|AS|AM|AL|AXL)`.
 
 **Not confirmed with Jeff yet:** the t-shirt size list (my default), the price ($750 +
