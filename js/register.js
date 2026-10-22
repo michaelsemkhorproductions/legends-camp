@@ -2,15 +2,11 @@
   "use strict";
 
   // ---------------------------------------------------------------------
-  // INTEGRATION POINT (Alex): Semkhor registration API + Stripe payment.
-  //
-  // Set LegendsRegistration.submit to a function that takes the validated
-  // registration object (see collect() below for the exact keys) and returns
-  // a Promise. Resolve it once payment has cleared to show the success panel;
-  // reject it with an Error whose message is safe to show the parent.
-  // Stripe's payment fields can mount into #payment-element.
-  //
-  // This file sends nothing anywhere and stores nothing in the browser.
+  // Semkhor + Stripe live in js/semkhor.js, which sets
+  // LegendsRegistration.submit. That function receives the validated object
+  // from collect() and must return a Promise: resolve once payment has
+  // cleared, or reject with an Error whose message is safe to show.
+  // This file sends nothing and stores nothing.
   // ---------------------------------------------------------------------
   window.LegendsRegistration = window.LegendsRegistration || { submit: null };
 

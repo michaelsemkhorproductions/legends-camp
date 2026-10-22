@@ -90,21 +90,21 @@
           <div class="reg-grid">
             <div class="field">
               <label for="parentFirstName">First name</label>
-              <input id="parentFirstName" name="parent_first_name" type="text" autocomplete="given-name" required maxlength="60">
+              <input id="parentFirstName" name="parent_first_name" type="text" autocomplete="given-name" required maxlength="50">
             </div>
             <div class="field">
               <label for="parentLastName">Last name</label>
-              <input id="parentLastName" name="parent_last_name" type="text" autocomplete="family-name" required maxlength="60">
+              <input id="parentLastName" name="parent_last_name" type="text" autocomplete="family-name" required maxlength="50">
             </div>
 
             <div class="field field--full">
               <label for="address">Street address</label>
-              <input id="address" name="address" type="text" autocomplete="address-line1" required maxlength="120">
+              <input id="address" name="address" type="text" autocomplete="address-line1" required maxlength="50">
             </div>
 
             <div class="field field--full field--city">
               <label for="city">City</label>
-              <input id="city" name="city" type="text" autocomplete="address-level2" required maxlength="60">
+              <input id="city" name="city" type="text" autocomplete="address-level2" required maxlength="50">
             </div>
             <div class="field">
               <label for="state">State</label>
@@ -140,7 +140,7 @@
             </div>
             <div class="field">
               <label for="email">Email</label>
-              <input id="email" name="email" type="email" autocomplete="email" required maxlength="120">
+              <input id="email" name="email" type="email" autocomplete="email" required maxlength="50">
               <p class="field__hint">Your confirmation will be sent here.</p>
             </div>
           </div>
@@ -222,13 +222,46 @@
 
           <div class="pay-total">
             <span>The Legends Camp · 1 player</span>
-            <strong>$750 <small>+ 3% credit card fee</small></strong>
+            <strong id="payTotalAmount">$772.50 <small>includes 3% card fee</small></strong>
           </div>
 
-          <!-- Stripe payment fields mount here (Semkhor + Stripe, wired by Alex). -->
-          <div class="pay-element" id="payment-element">
+          <div class="pay-element is-placeholder" id="payment-element">
             <svg class="pay-element__icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 8V7a3 3 0 1 1 6 0v3H9Z"/></svg>
             <p>Secure card payment by Stripe will appear here.</p>
+          </div>
+
+          <div class="pay-card" id="payCard" hidden>
+            <div class="field">
+              <label for="ccNum">Card number</label>
+              <input id="ccNum" name="cc_num" type="text" inputmode="numeric" autocomplete="cc-number" maxlength="23" placeholder="4000 2000 2000 2000">
+            </div>
+            <div class="pay-card__row">
+              <div class="field">
+                <label for="ccMonth">Month</label>
+                <select id="ccMonth" name="cc_exp_month" autocomplete="cc-exp-month">
+                  <option value="">MM</option>
+                  <option value="01">01</option><option value="02">02</option><option value="03">03</option>
+                  <option value="04">04</option><option value="05">05</option><option value="06">06</option>
+                  <option value="07">07</option><option value="08">08</option><option value="09">09</option>
+                  <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="ccYear">Year</label>
+                <select id="ccYear" name="cc_exp_year" autocomplete="cc-exp-year">
+                  <option value="">YYYY</option>
+                  <option>2026</option><option>2027</option><option>2028</option><option>2029</option>
+                  <option>2030</option><option>2031</option><option>2032</option><option>2033</option>
+                  <option>2034</option><option>2035</option><option>2036</option><option>2037</option>
+                  <option>2038</option><option>2039</option><option>2040</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="ccCvv">Security code</label>
+                <input id="ccCvv" name="cc_cvv" type="text" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="123">
+              </div>
+            </div>
+            <p class="pay-card__hint">Test checkout. Card 4000200020002000 completes registration without Stripe.</p>
           </div>
 
           <div class="reg-submit">
@@ -264,9 +297,11 @@
 
     <div class="wrap">
       <section class="reg-done" id="regSuccess" tabindex="-1" hidden aria-labelledby="regSuccessTitle">
-        <img src="images/logo-dark.svg" alt="" width="56" height="56" class="reg-done__crest">
-        <p class="chip chip--dark"><span class="chip__dot" aria-hidden="true"></span>Registration complete</p>
-        <h2 id="regSuccessTitle">See you on the <em>pitch</em></h2>
+        <div class="reg-done__check" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="72" height="72"><path d="M5 12.5 9.2 16.7 19 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h2 id="regSuccessTitle">Registration complete</h2>
+        <p class="reg-done__pitch">See you on the <em>pitch</em></p>
         <p class="reg-done__text">Thanks, <span id="regSuccessName">—</span>. A confirmation is on its way to <strong id="regSuccessEmail">—</strong>.</p>
         <a class="btn btn--line" href="index.html">Back to the camp</a>
       </section>
@@ -298,7 +333,9 @@
   </div>
 </footer>
 
+<script src="https://js.stripe.com/v3/"></script>
 <script src="js/main.js"></script>
 <script src="js/register.js"></script>
+<script src="js/semkhor.js"></script>
 </body>
 </html>

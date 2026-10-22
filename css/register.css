@@ -209,13 +209,24 @@
 .pay-total small { font-size: .8rem; font-weight: 600; color: var(--muted-dark); letter-spacing: 0; }
 
 .pay-element {
+  display: block;
+  min-height: 52px; padding: .95rem 1rem; margin-bottom: 1.5rem;
+  border: 1px solid rgba(255,255,255,.28); border-radius: var(--radius-sm);
+  background: #fff; color: var(--navy-950);
+}
+.pay-element.is-placeholder {
   display: flex; align-items: center; gap: .85rem;
-  min-height: 72px; padding: 1rem 1.15rem; margin-bottom: 1.5rem;
-  border: 1px dashed rgba(255,255,255,.28); border-radius: var(--radius-sm);
-  background: rgba(255,255,255,.04); color: #dfe5ee;
+  min-height: 72px; padding: 1rem 1.15rem;
+  border-style: dashed; background: rgba(255,255,255,.04); color: #dfe5ee;
 }
 .pay-element p { margin: 0; font-size: .92rem; }
 .pay-element__icon { flex: none; color: var(--gold); }
+
+.pay-card { display: grid; gap: .9rem; margin-bottom: 1.5rem; }
+.pay-card[hidden] { display: none; }
+.pay-card__row { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: .75rem; }
+.pay-card .field label { color: #e6eaf0; }
+.pay-card__hint { margin: 0; color: var(--muted-dark); font-size: .82rem; }
 
 .reg-submit { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; }
 .reg-submit__btn { background: none; border: 0; padding: 0; font: inherit; cursor: pointer; }
@@ -271,10 +282,23 @@
   background: var(--navy-950); color: #fff; border-radius: var(--radius-lg);
   padding: clamp(2.5rem, 6vw, 4.5rem) 1.5rem; box-shadow: 0 40px 80px -40px rgba(5,15,30,.55);
 }
-.reg-done__crest { width: 110px; height: auto; margin: 0 auto 1.25rem; }
-.reg-done h2 { font-size: clamp(2.2rem, 1.5rem + 3vw, 3.6rem); }
-.reg-done h2 em { color: var(--gold); }
-.reg-done__text { color: #dfe5ee; margin: 1rem auto 2rem; max-width: 46ch; }
+.reg-done__check {
+  display: grid; place-items: center;
+  width: 128px; height: 128px; margin: 0 auto 1.6rem;
+  border-radius: 50%; background: #1faa56; color: #fff;
+  box-shadow: 0 0 0 14px rgba(31, 170, 86, .22);
+}
+.reg-done__check svg { width: 76px; height: 76px; }
+.reg-done h2 {
+  margin: 0; font-size: clamp(2.6rem, 1.6rem + 3.4vw, 4.4rem);
+  letter-spacing: -.035em; line-height: 1.02;
+}
+.reg-done__pitch {
+  margin: .85rem 0 0; font-size: clamp(1.45rem, 1.1rem + 1.2vw, 2.1rem);
+  font-weight: 800; letter-spacing: -.03em; color: #fff;
+}
+.reg-done__pitch em { color: var(--gold); }
+.reg-done__text { color: #dfe5ee; margin: 1.15rem auto 2rem; max-width: 46ch; font-size: 1.05rem; }
 .reg-done__text strong { color: #fff; overflow-wrap: anywhere; }
 .page-register.is-registered .reg-layout { display: none; }
 
