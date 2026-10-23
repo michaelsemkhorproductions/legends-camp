@@ -124,6 +124,9 @@
       ]
     };
     body.registrants[0][SHIRT_CODE] = SHIRTS[data.player_tshirt_size] || data.player_tshirt_size;
+    if (!IS_DEV && data.player_position) {
+      body.registrants[0]._PlayerPosition = data.player_position;
+    }
     if (card) {
       body.cc_num = card.number;
       body.cc_exp_month = card.month;

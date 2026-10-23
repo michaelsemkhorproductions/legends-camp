@@ -221,6 +221,7 @@
     player_birthdate: "Birthdate",
     player_team_age_group: "Current team age group",
     player_tshirt_size: "T-shirt size",
+    player_position: "Player type",
     player_sex: "Sex"
   };
 
