@@ -629,3 +629,7 @@ em { font-family: var(--font-accent); font-style: italic; font-weight: 400; lett
 @media (max-width: 379px) {
   .price { flex-wrap: wrap; row-gap: .35rem; }
 }
+
+/* Early-bird pricing line under the price (2026-10-28). */
+.price-then { margin: 0 0 .5rem; color: var(--gold); font-weight: 700; font-size: .95rem; }
+.register-card .price-then + .register-card__note { margin-top: 0; }

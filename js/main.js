@@ -12,7 +12,24 @@
   // (first session per the published schedule: 8:00–10:00am).
   var CAMP_START = new Date("2026-11-21T08:00:00-05:00").getTime();
 
+  // Early-bird pricing (Jeff, 2026-10-27): $595 until 23:59 on Sat Nov 7, 2026
+  // (Eastern), then $695. No fees on either. Elements marked .js-early show
+  // until then; .js-regular ones (hidden in the HTML) show afterwards.
+  // The amount actually charged comes from the Semkhor event, not from here.
+  var EARLY_BIRD_ENDS = new Date("2026-11-08T00:00:00-05:00").getTime();
+
   document.documentElement.classList.add("js");
+
+  function applyPricing() {
+    var regular = Date.now() >= EARLY_BIRD_ENDS;
+    document.querySelectorAll(".js-early").forEach(function (el) { el.hidden = regular; });
+    document.querySelectorAll(".js-regular").forEach(function (el) { el.hidden = !regular; });
+    return regular;
+  }
+  if (!applyPricing()) {
+    var untilSwitch = EARLY_BIRD_ENDS - Date.now();
+    if (untilSwitch < 2147483647) setTimeout(applyPricing, untilSwitch + 1000);
+  }
 
   document.querySelectorAll(".js-register-link").forEach(function (el) {
     el.setAttribute("href", REGISTER_URL);

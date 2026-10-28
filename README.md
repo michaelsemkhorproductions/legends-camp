@@ -1,5 +1,18 @@
 # The Legends Camp — site
 
+## 2026-10-28 — early-bird pricing (Jeff, Slack 2026-10-27)
+
+$595 early bird until 23:59 on Sat Nov 7, 2026, then $695. **No fees on either.** The marketing
+copy (home hero, price card, FAQ, sticky bar, registration summary card) switches by itself:
+`EARLY_BIRD_ENDS` in `js/main.js` (2026-11-08 00:00 Eastern) shows `.js-early` elements before it
+and `.js-regular` ones after.
+
+**Alex — the amount actually charged is still yours:** `js/semkhor.js` takes the price from the
+Semkhor event (`pricing.registration_cost`, fallback `772.5`) and shows it as "includes 3% card
+fee". For the new pricing, the event needs $595 until the deadline and $695 after, with no fee,
+and the "includes 3% card fee" note in `showPrice()` should go. Also, `SHIRTS` in semkhor.js still
+uses the old sizes: `AXS` (new) has no label, and YS/YXL no longer exist.
+
 ## 2026-10-22 — link-preview image
 
 Shared links now show the David Chorro / Cristiano Ronaldo photo, as Jeff asked:
@@ -98,7 +111,7 @@ HTTP fetch — nothing hand-altered except what's noted below.
   you have it, see "The one thing you'll want to change" below — it's one line in `js/main.js`
   unless you want it wired into Semkhor's registration/reporting backend instead of a plain
   link, in which case that's new work, not a config change.
-- **Price** — page shows $750 (+ 3% credit card fee). Some earlier campaign material mentioned $850.
+- **Price** — superseded: $595 early bird / $695, no fees (see 2026-10-28).
   Worth a one-line confirmation from Jeff before this goes live for real.
 - **Domain** — Alex is handling deployment to `thelegendscamp.com`; this repo on GitHub under
   Michael's account is the handoff point.

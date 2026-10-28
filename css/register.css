@@ -308,3 +308,9 @@
 @media (max-width: 420px) {
   .reg-hero .chip { font-size: .72rem; padding-inline: .8em; white-space: nowrap; }
 }
+
+/* Early-bird line in the summary card. */
+.reg-summary .price-then { margin: -.6rem 0 1.1rem; font-size: .88rem; }
+@media (max-width: 979px) {
+  .reg-summary .price-then { grid-column: 2; margin: .3rem 0 0; font-size: .8rem; }
+}
