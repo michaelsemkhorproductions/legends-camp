@@ -13,7 +13,9 @@
   // The live form's shirt field code differs from the lab form.
   var SHIRT_CODE = IS_DEV ? "_Playertshirtsize" : "_PlayerTshirtSize";
 
-  var registrationCost = 772.5;
+  // Flat fallback when the event has no usable price. Date rules from the
+  // event query override this (early bird is $595 before 11/08/2026).
+  var registrationCost = 695;
   var cardComplete = false;
   var stripe = null;
   var cardElement = null;
@@ -48,11 +50,78 @@
   function showPrice(amount) {
     var el = document.getElementById("payTotalAmount");
     if (!el) return;
-    el.textContent = "";
-    el.appendChild(document.createTextNode(money(amount) + " "));
-    var note = document.createElement("small");
-    note.textContent = "includes 3% card fee";
-    el.appendChild(note);
+    el.textContent = money(amount);
+  }
+
+  // Calendar date in Eastern time, as YYYYMMDD. "before 11/08/2026" means
+  // through 11:59pm on Nov 7 in Sarasota.
+  function easternDateKey(date) {
+    var parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: "America/New_York",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    }).formatToParts(date);
+    var year = 0;
+    var month = 0;
+    var day = 0;
+    parts.forEach(function (part) {
+      if (part.type === "year") year = Number(part.value);
+      if (part.type === "month") month = Number(part.value);
+      if (part.type === "day") day = Number(part.value);
+    });
+    return year * 10000 + month * 100 + day;
+  }
+
+  // Semkhor match strings look like "_RegistrationDate=before 11/08/2026|^|".
+  // Clauses are separated by |^|. Every clause has to match; a clause we
+  // don't understand keeps the rule from applying.
+  var DATE_CLAUSE = /^_?RegistrationDate\s*=\s*(on or before|on or after|before|after|on)\s+(\d{1,2})\/(\d{1,2})\/(\d{4})$/i;
+
+  function dateClauseMatches(clause, todayKey) {
+    var match = DATE_CLAUSE.exec(clause);
+    if (!match) return null;
+    var month = Number(match[2]);
+    var day = Number(match[3]);
+    var year = Number(match[4]);
+    if (month < 1 || month > 12 || day < 1 || day > 31) return false;
+    var key = year * 10000 + month * 100 + day;
+    var op = match[1].toLowerCase();
+    if (op === "before") return todayKey < key;
+    if (op === "after") return todayKey > key;
+    if (op === "on or before") return todayKey <= key;
+    if (op === "on or after") return todayKey >= key;
+    return todayKey === key;
+  }
+
+  function ruleMatches(rule, todayKey) {
+    var clauses = String((rule && rule.match) || "").split("|^|");
+    var sawClause = false;
+    for (var i = 0; i < clauses.length; i++) {
+      var clause = clauses[i].replace(/^\s+|\s+$/g, "");
+      if (!clause) continue;
+      var matched = dateClauseMatches(clause, todayKey);
+      if (matched !== true) return false;
+      sawClause = true;
+    }
+    return sawClause;
+  }
+
+  function priceFromPricing(pricing) {
+    var price = 695;
+    var flat = Number(pricing && pricing.registration_cost);
+    if (flat > 0) price = Math.round(flat * 100) / 100;
+
+    var todayKey = easternDateKey(new Date());
+    var rules = (pricing && pricing.rules) || [];
+    for (var i = 0; i < rules.length; i++) {
+      var rule = rules[i];
+      if (!ruleMatches(rule, todayKey)) continue;
+      var rulePrice = Number(rule && rule.price);
+      if (!(rulePrice >= 0) || rulePrice === Infinity) continue;
+      return Math.round(rulePrice * 100) / 100;
+    }
+    return price;
   }
 
   function apiPost(path, body) {
@@ -186,9 +255,7 @@
       if (!result || !result.success || !result.registration) {
         throw new Error(apiError(result) || "Registration is unavailable right now. Please email or text us.");
       }
-      var pricing = result.registration.pricing || {};
-      var cost = Number(pricing.registration_cost);
-      if (cost > 0) registrationCost = Math.round(cost * 100) / 100;
+      registrationCost = priceFromPricing(result.registration.pricing || {});
       showPrice(registrationCost);
     });
   }

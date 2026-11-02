@@ -206,7 +206,6 @@
   color: var(--muted-dark); font-weight: 600; font-size: .92rem;
 }
 .pay-total strong { color: #fff; font-size: 1.6rem; font-weight: 800; letter-spacing: -.03em; }
-.pay-total small { font-size: .8rem; font-weight: 600; color: var(--muted-dark); letter-spacing: 0; }
 
 .pay-element {
   display: block;

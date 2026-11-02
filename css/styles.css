@@ -583,28 +583,53 @@ em { font-family: var(--font-accent); font-style: italic; font-weight: 400; lett
 .hero--v2 .hero__coach-banner {
   order: 3; grid-column: 1 / -1;
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(200px, .72fr) minmax(0, 1fr);
-  align-items: center; gap: clamp(12px, 2vw, 28px);
+  align-items: start; gap: clamp(12px, 2vw, 28px);
 }
 .hero--v2 .hero__coach-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; gap: 4px; }
 .hero--v2 .hero__portrait { min-width: 0; margin: 0; }
 .hero--v2 .hero__portrait svg { display: block; width: 100%; height: auto; overflow: hidden; }
-.hero--v2 .hero__actions { flex-direction: column; flex-wrap: nowrap; justify-content: center; align-items: center; gap: 1rem; margin: 0; }
+.hero--v2 .hero__mid {
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+  gap: .7rem; min-width: 0; align-self: start; padding-top: .2rem;
+}
+.hero--v2 .hero__actions { flex-direction: column; flex-wrap: nowrap; justify-content: center; align-items: center; gap: .75rem; margin: 0; }
 .hero--v2 .hero__actions > a { width: 200px; justify-content: center; }
 .hero--v2 .hero__actions .btn-split__label { width: 100%; justify-content: center; }
 .hero--v2 .hero__actions .btn--line { background: rgba(5,15,30,.72); }
 .hero--v2 .hero__actions .btn--line:hover { background: var(--navy-900); }
+.hero--v2 .hero__spotlight {
+  position: relative; width: min(336px, 100%); margin: 0; aspect-ratio: 336 / 172; overflow: hidden;
+  border-radius: 12px; box-shadow: 0 10px 24px rgba(0, 0, 0, .38);
+}
+.hero--v2 .hero__spotlight img {
+  position: absolute; inset: 0; display: block; width: 100%; height: 100%;
+  object-fit: cover; object-position: center 38%;
+}
 @media (max-width: 979px) {
   .hero--v2 .hero__coach-banner { order: 2; }
   .hero--v2 .hero__panel { order: 3; }
 }
 @media (max-width: 639px) {
+  /* Safari stretches a display:contents child to the coach column and, with
+     height:100% and object-fit, turns the Messi photo into a vertical strip.
+     Hang the photo under the banner instead of making it a grid item. */
   .hero--v2 .hero__coach-banner {
+    position: relative;
     grid-template-columns: minmax(0, 1fr) 144px minmax(0, 1fr);
     margin-inline: -12px; gap: 8px;
+    padding-bottom: calc(56.1% + .85rem);
   }
   .hero--v2 .hero__coach-pair { grid-template-columns: minmax(0, 1fr); gap: 8px; }
   .hero--v2 .hero__portrait { width: 100%; max-width: 132px; justify-self: center; }
-  .hero--v2 .hero__actions { gap: .8rem; }
+  .hero--v2 .hero__mid { align-self: center; padding-top: 0; }
+  .hero--v2 .hero__actions { gap: .65rem; }
+  .hero--v2 .hero__spotlight {
+    position: absolute; left: 12px; right: 12px; bottom: 0; width: auto; max-width: none;
+    height: auto; aspect-ratio: auto; margin: 0;
+  }
+  .hero--v2 .hero__spotlight img {
+    position: static; inset: auto; width: 100%; height: auto; object-fit: contain; object-position: center;
+  }
   .hero--v2 .hero__actions > a { width: 144px; }
   .hero--v2 .hero__actions .btn-split__label { height: 52px; font-size: .9rem; padding-inline: .7em; }
   .hero--v2 .hero__actions .btn--line { height: 52px; font-size: .82rem; padding-inline: .7em; }
