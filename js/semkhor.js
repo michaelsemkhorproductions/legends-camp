@@ -16,6 +16,7 @@
   // Flat fallback when the event has no usable price. Date rules from the
   // event query override this (early bird is $595 before 11/08/2026).
   var registrationCost = 695;
+  var pricingSnapshot = null;
   var cardComplete = false;
   var stripe = null;
   var cardElement = null;
@@ -124,6 +125,24 @@
     return price;
   }
 
+  function extendedCareAddOn(pricing, extendedCare) {
+    var choice = extendedCare === "Yes" ? "Yes" : "No";
+    var rules = (pricing && pricing.value_add_rules) || [];
+    for (var i = 0; i < rules.length; i++) {
+      var rule = rules[i];
+      if (String((rule && rule.match) || "") === "_ExtendedCare=" + choice) {
+        var add = Number(rule && rule.price);
+        return add >= 0 && add !== Infinity ? Math.round(add * 100) / 100 : 0;
+      }
+    }
+    return choice === "Yes" ? 100 : 0;
+  }
+
+  function totalFee(data) {
+    var care = (data && data.extended_care) || "No";
+    return registrationCost + extendedCareAddOn(pricingSnapshot, care);
+  }
+
   function apiPost(path, body) {
     return fetch(API + path, {
       method: "POST",
@@ -188,7 +207,8 @@
           _PlayerLastName: data.player_last_name,
           _PlayerBirthDate: data.player_birthdate,
           _PlayerAgeGroup: data.player_team_age_group === "NONE" ? "Not on a team" : data.player_team_age_group,
-          _PlayerGender: data.player_sex === "F" ? "Female" : "Male"
+          _PlayerGender: data.player_sex === "F" ? "Female" : "Male",
+          _ExtendedCare: data.extended_care === "Yes" ? "Yes" : "No"
         }
       ]
     };
@@ -255,8 +275,17 @@
       if (!result || !result.success || !result.registration) {
         throw new Error(apiError(result) || "Registration is unavailable right now. Please email or text us.");
       }
-      registrationCost = priceFromPricing(result.registration.pricing || {});
+      pricingSnapshot = result.registration.pricing || {};
+      registrationCost = priceFromPricing(pricingSnapshot);
       showPrice(registrationCost);
+    });
+  }
+
+  var regForm = document.getElementById("registrationForm");
+  if (regForm) {
+    regForm.addEventListener("change", function (e) {
+      if (e.target.name !== "extended_care") return;
+      showPrice(totalFee({ extended_care: e.target.value }));
     });
   }
 
@@ -268,7 +297,7 @@
   window.LegendsRegistration = window.LegendsRegistration || {};
   window.LegendsRegistration.submit = function (data) {
     return configReady.then(function () {
-      var fee = registrationCost;
+      var fee = totalFee(data);
 
       if (testCardMode) {
         var card = readTestCard();

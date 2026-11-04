@@ -222,7 +222,8 @@
     player_team_age_group: "Current team age group",
     player_tshirt_size: "T-shirt size",
     player_position: "Player type",
-    player_sex: "Sex"
+    player_sex: "Sex",
+    extended_care: "Extended care"
   };
 
   function digits(v) { return String(v || "").replace(/\D/g, ""); }
