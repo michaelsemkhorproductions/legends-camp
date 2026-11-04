@@ -313,3 +313,9 @@
 @media (max-width: 979px) {
   .reg-summary .price-then { grid-column: 2; margin: .3rem 0 0; font-size: .8rem; }
 }
+
+/* Optional extended care line in the summary card (2026-11-04). */
+.reg-summary .price-extra { margin: -.6rem 0 1.1rem; font-size: .85rem; color: var(--muted-dark); }
+@media (max-width: 979px) {
+  .reg-summary .price-extra { grid-column: 2; margin: .25rem 0 0; font-size: .78rem; }
+}

@@ -658,3 +658,13 @@ em { font-family: var(--font-accent); font-style: italic; font-weight: 400; lett
 /* Early-bird pricing line under the price (2026-10-28). */
 .price-then { margin: 0 0 .5rem; color: var(--gold); font-weight: 700; font-size: .95rem; }
 .register-card .price-then + .register-card__note { margin-top: 0; }
+
+/* Five stats (2026-11-04): the dark tile runs across the top, then four tiles in a row (2×2 on phones). */
+.stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.stats .stat--dark { grid-column: 1 / -1; min-height: 0; flex-direction: row; align-items: center; gap: 1rem; }
+.stats .stat--dark .stat__label { margin-top: 0; }
+.stats .stat { min-height: 120px; }
+.stats .stat--dark { min-height: 0; }
+@media (max-width: 560px) {
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

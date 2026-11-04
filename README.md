@@ -1,5 +1,17 @@
 # The Legends Camp — site
 
+## 2026-11-04 — Jeff's copy review (Word doc with tracked changes)
+
+Applied all of Jeff's tracked edits: groups of 16 (field) / 8 (goalkeepers), 8-1 and 4-1 ratios, five
+days Nov 21–25 (the Nov 28 match day is gone), new session times, optional extended care $100,
+pack-your-own-lunch, a new "What is for lunch?" FAQ, new coach captions, gallery alt text, five stats.
+The early bird now runs **until 23:59 on Mon Nov 9** (`EARLY_BIRD_ENDS` = Nov 10 00:00 ET), and the
+countdown targets 9:00am on Nov 21 (the first session). Share tags now point at thelegendscamp.com.
+
+**Alex:** (1) the Semkhor event's early-bird rule needs to move to `before 11/10/2026`; (2) the
+extended-care option (+$100) on the form is yours, as agreed in Slack. The summary card already says
+"Optional extended care +$100 (total $695 / $795)".
+
 ## 2026-10-28 — early-bird pricing (Jeff, Slack 2026-10-27)
 
 $595 early bird until 23:59 on Sat Nov 7, 2026, then $695. **No fees on either.** The marketing
