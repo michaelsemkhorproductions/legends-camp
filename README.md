@@ -1,5 +1,13 @@
 # The Legends Camp — site
 
+## 2026-11-10 — $499 launch price, hero details, coaching carousel (Jeff)
+
+Page copy now shows a flat **$499 launch price** (+$100 optional extended care = $599); the early-bird
+date switch is removed. **The amount charged still comes from the Semkhor event**: the event must be set
+to $499 with no date rules before or together with deploying this page.
+New `#coaching` carousel after the David Chorro section: add a slide by copying an `<li class="connect-slide">`;
+a `<video>` can replace the `<img>`. CSS/JS use `?v=` tags: bump them when those files change.
+
 ## 2026-11-04 — Jeff's copy review (Word doc with tracked changes)
 
 Applied all of Jeff's tracked edits: groups of 16 (field) / 8 (goalkeepers), 8-1 and 4-1 ratios, five

@@ -12,24 +12,7 @@
   // (first session per the published schedule: Sat–Sun 9:00am–12:00pm).
   var CAMP_START = new Date("2026-11-21T09:00:00-05:00").getTime();
 
-  // Early-bird pricing (Jeff, 2026-11-04): $595 until 23:59 on Mon Nov 9, 2026
-  // (Eastern), then $695. No fees on either. Elements marked .js-early show
-  // until then; .js-regular ones (hidden in the HTML) show afterwards.
-  // The amount actually charged comes from the Semkhor event, not from here.
-  var EARLY_BIRD_ENDS = new Date("2026-11-10T00:00:00-05:00").getTime();
-
   document.documentElement.classList.add("js");
-
-  function applyPricing() {
-    var regular = Date.now() >= EARLY_BIRD_ENDS;
-    document.querySelectorAll(".js-early").forEach(function (el) { el.hidden = regular; });
-    document.querySelectorAll(".js-regular").forEach(function (el) { el.hidden = !regular; });
-    return regular;
-  }
-  if (!applyPricing()) {
-    var untilSwitch = EARLY_BIRD_ENDS - Date.now();
-    if (untilSwitch < 2147483647) setTimeout(applyPricing, untilSwitch + 1000);
-  }
 
   document.querySelectorAll(".js-register-link").forEach(function (el) {
     el.setAttribute("href", REGISTER_URL);
@@ -41,6 +24,31 @@
       el.removeAttribute("rel");
     }
   });
+
+  // "Coaching that connects" carousel: swipe or scroll natively; the arrows
+  // move one slide and switch off at either end.
+  var track = document.getElementById("connectTrack");
+  var prev = document.getElementById("connectPrev");
+  var next = document.getElementById("connectNext");
+  if (track && prev && next) {
+    var step = function (dir) {
+      var slide = track.querySelector(".connect-slide");
+      if (!slide) return;
+      var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+      var smooth = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      track.scrollBy({ left: dir * (slide.getBoundingClientRect().width + gap), behavior: smooth ? "smooth" : "auto" });
+    };
+    var syncArrows = function () {
+      var end = track.scrollWidth - track.clientWidth;
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft >= end - 2;
+    };
+    prev.addEventListener("click", function () { step(-1); });
+    next.addEventListener("click", function () { step(1); });
+    track.addEventListener("scroll", syncArrows, { passive: true });
+    window.addEventListener("resize", syncArrows);
+    syncArrows();
+  }
 
   // Mobile nav toggle
   var toggle = document.getElementById("navToggle");

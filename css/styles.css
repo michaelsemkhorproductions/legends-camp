@@ -668,3 +668,49 @@ em { font-family: var(--font-accent); font-style: italic; font-weight: 400; lett
 @media (max-width: 560px) {
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+
+/* ---- 2026-11-10 (Jeff): compact countdown, detail boxes, text link, carousel ---- */
+.hero--v2 .countdown { margin-bottom: .6rem; }
+.hero--v2 .countdown__title { font-size: .68rem; padding: .32rem .55rem; margin-bottom: .45rem; }
+.hero--v2 .countdown__row { gap: .4rem; }
+.hero--v2 .countdown__unit { padding: .42rem .3rem .36rem; }
+.hero--v2 .countdown__num { font-size: clamp(1.05rem, .95rem + .4vw, 1.3rem); }
+.hero--v2 .countdown__label { margin-top: .15rem; font-size: .58rem; }
+.hero--v2 .glance dd { font-size: .9rem; line-height: 1.3; }
+.hero--v2 .glance dd span { display: block; margin-top: .15rem; font-size: .8rem; font-weight: 500; color: #dfe5ee; }
+.hero__text-us {
+  display: flex; align-items: center; justify-content: center; min-height: 46px; margin-top: .6rem;
+  padding: .55rem 1rem; border-radius: var(--radius-sm); background: var(--navy-950);
+  border: 1px solid var(--gold); color: var(--gold); font-weight: 700; font-size: .95rem; text-decoration: none;
+  transition: background-color .2s var(--ease), color .2s var(--ease);
+}
+.hero__text-us:hover { background: var(--gold); color: var(--navy-950); }
+
+.connect { background: var(--navy-950); color: #fff; }
+.connect__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; margin-bottom: clamp(1.5rem, 3vw, 2.25rem); }
+.connect__eyebrow { margin: 0 0 .7rem; color: var(--gold); font-size: .85rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.connect h2 { color: #fff; }
+.connect h2 em { display: block; color: var(--gold); margin-top: .08em; }
+.connect__controls { display: flex; flex: none; gap: .6rem; }
+.connect__nav {
+  display: grid; place-items: center; width: 48px; height: 48px; padding: 0; border-radius: 50%; cursor: pointer;
+  border: 1px solid rgba(255,255,255,.3); background: transparent; color: #fff; font: inherit; font-size: 1.25rem;
+  transition: background-color .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease), opacity .2s;
+}
+.connect__nav:hover:not(:disabled) { background: var(--gold); border-color: var(--gold); color: var(--navy-950); }
+.connect__nav:disabled { opacity: .35; cursor: default; }
+.connect-track {
+  list-style: none; margin: 0; padding: 0 0 .75rem; display: flex; gap: 1rem; overflow-x: auto;
+  scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: thin;
+  scrollbar-color: rgba(246,188,23,.55) transparent;
+}
+.connect-slide { flex: 0 0 min(82%, 340px); scroll-snap-align: start; }
+.connect-slide figure { margin: 0; }
+.connect-slide img, .connect-slide video { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; border-radius: var(--radius); background: var(--navy-800); }
+.connect-slide figcaption { margin-top: .75rem; font-weight: 600; font-size: 1rem; line-height: 1.35; color: #e3e8ef; }
+@media (max-width: 639px) {
+  .connect__controls { display: none; }
+}
+/* Dates and Ages have the longest lines, so each gets a full row. */
+.hero--v2 .glance > div:nth-child(-n+2) { grid-column: 1 / -1; }
