@@ -714,3 +714,22 @@ em { font-family: var(--font-accent); font-style: italic; font-weight: 400; lett
 }
 /* Dates and Ages have the longest lines, so each gets a full row. */
 .hero--v2 .glance > div:nth-child(-n+2) { grid-column: 1 / -1; }
+
+/* Messi notes + "See more photos" gallery (2026-11-10). */
+.hero__note, .connect__note { font-size: .78rem; line-height: 1.45; color: #c3ccda; }
+.hero__note { max-width: 70ch; margin: 1rem 0 0; }
+.connect__note { max-width: 70ch; margin: .9rem 0 0; }
+.gallery-stream--more { margin-top: var(--gallery-gap, 12px); }
+.gallery-more-actions { display: flex; justify-content: center; margin-top: 1.75rem; }
+.gallery-toggle {
+  display: inline-flex; align-items: center; gap: .6rem;
+  padding: .85em 1.1em .85em 1.5em; border-radius: 999px; border: 0; cursor: pointer;
+  background: var(--navy-950); color: #fff; font: inherit; font-weight: 700; font-size: .95rem;
+  transition: background-color .2s var(--ease), transform .2s var(--ease);
+}
+.gallery-toggle:hover { background: var(--navy-800); transform: translateY(-1px); }
+.gallery-toggle__count {
+  display: inline-grid; place-items: center; min-width: 2.1em; height: 2.1em; padding: 0 .5em;
+  border-radius: 999px; background: var(--gold); color: var(--navy-950); font-size: .8rem; font-weight: 800;
+}
+.gallery-toggle[aria-expanded="true"] .gallery-toggle__count { display: none; }

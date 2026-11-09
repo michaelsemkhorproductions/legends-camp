@@ -37,37 +37,56 @@
 
   if (typeof module !== "undefined" && module.exports) module.exports = planRows;
   if (typeof document === "undefined") return;
-  var gallery = document.getElementById("galleryStream");
-  if (!gallery) return;
-  var photos = Array.from(gallery.querySelectorAll(".gallery-photo"));
-  var ratios = photos.map(function (photo) {
-    var img = photo.querySelector("img");
-    return Number(img.getAttribute("width")) / Number(img.getAttribute("height"));
-  });
-  var lastWidth = 0;
-  function layout() {
-    var width = gallery.clientWidth;
-    if (!width || Math.abs(width - lastWidth) < 1) return;
-    lastWidth = width;
-    var phone = width < 600;
-    var target = phone ? 200 : width < 900 ? 210 : 240;
-    var gap = phone ? 8 : 12;
-    var fragment = document.createDocumentFragment();
-    gallery.style.setProperty("--gallery-gap", gap + "px");
-    planRows(ratios, width, target, gap, phone ? 3 : 8, phone ? 120 : 0).forEach(function (row) {
-      var element = document.createElement("div");
-      element.className = "gallery-row";
-      element.style.height = row.height + "px";
-      photos.slice(row.start, row.end).forEach(function (photo) { element.appendChild(photo); });
-      fragment.appendChild(element);
+  // Every .gallery-stream gets its own justified layout. A stream that is
+  // hidden (the "See more" photos) has no width, so it is laid out the moment
+  // it is shown, through the ResizeObserver.
+  function setup(gallery) {
+    var photos = Array.from(gallery.querySelectorAll(".gallery-photo"));
+    var ratios = photos.map(function (photo) {
+      var img = photo.querySelector("img");
+      return Number(img.getAttribute("width")) / Number(img.getAttribute("height"));
     });
-    gallery.replaceChildren(fragment);
-    gallery.classList.add("is-justified");
+    var lastWidth = 0;
+    function layout() {
+      var width = gallery.clientWidth;
+      if (!width || Math.abs(width - lastWidth) < 1) return;
+      lastWidth = width;
+      var phone = width < 600;
+      var target = phone ? 200 : width < 900 ? 210 : 240;
+      var gap = phone ? 8 : 12;
+      var fragment = document.createDocumentFragment();
+      gallery.style.setProperty("--gallery-gap", gap + "px");
+      planRows(ratios, width, target, gap, phone ? 3 : 8, phone ? 120 : 0).forEach(function (row) {
+        var element = document.createElement("div");
+        element.className = "gallery-row";
+        element.style.height = row.height + "px";
+        photos.slice(row.start, row.end).forEach(function (photo) { element.appendChild(photo); });
+        fragment.appendChild(element);
+      });
+      gallery.replaceChildren(fragment);
+      gallery.classList.add("is-justified");
+    }
+    layout();
+    if (typeof ResizeObserver !== "undefined") {
+      new ResizeObserver(layout).observe(gallery);
+    } else {
+      window.addEventListener("resize", layout);
+    }
   }
-  layout();
-  if (typeof ResizeObserver !== "undefined") {
-    new ResizeObserver(layout).observe(gallery);
-  } else {
-    window.addEventListener("resize", layout);
+  document.querySelectorAll(".gallery-stream").forEach(setup);
+
+  // "See more photos": reveals the extra stream. Its images are lazy, so they
+  // only download once it is open.
+  var toggle = document.getElementById("galleryToggle");
+  var more = document.getElementById("galleryMore");
+  if (toggle && more) {
+    var label = toggle.querySelector(".gallery-toggle__label");
+    toggle.addEventListener("click", function () {
+      var open = more.hidden;
+      more.hidden = !open;
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      if (label) label.textContent = open ? "Show fewer photos" : "See more photos";
+      if (!open) document.getElementById("gallery").scrollIntoView({ block: "start" });
+    });
   }
 })();
