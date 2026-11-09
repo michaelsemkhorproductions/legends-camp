@@ -355,3 +355,18 @@
 @media (max-width: 979px) {
   .reg-summary .price-extra { grid-column: 2; margin: .25rem 0 0; font-size: .78rem; }
 }
+
+
+/* Birthdate: month name, day and year dropdowns on one line. */
+.birth-field legend { font-size: .85rem; font-weight: 700; color: var(--ink); letter-spacing: -.005em; padding: 0; margin-bottom: .4rem; }
+.birth-row { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, .9fr) minmax(0, 1.1fr); gap: .5rem; }
+.birth-row__part { min-width: 0; }
+.birth-field .dd__list { min-width: 8.5rem; }
+.birth-row { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr) minmax(0, 1.1fr); }
+.field .birth-row .dd__button { padding: 0 .65rem; gap: .3rem; font-size: .95rem; }
+.birth-row .dd__value { text-overflow: clip; }
+@media (max-width: 360px) { .field .birth-row .dd__button { padding: 0 .5rem; gap: .2rem; font-size: .9rem; } }
+/* Month gets its own line so even "September" is never clipped. */
+.birth-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.birth-row__part:first-child { grid-column: 1 / -1; }
+.field .birth-row .dd__button, .field .birth-row .dd__button { padding: 0 1rem; gap: .75rem; font-size: 1rem; }

@@ -23,7 +23,7 @@
 
 <link rel="icon" type="image/svg+xml" href="images/logo-dark.svg">
 <link rel="stylesheet" href="css/styles.css">
-<link rel="stylesheet" href="css/register.css">
+<link rel="stylesheet" href="css/register.css?v=20261109c">
 </head>
 <body class="page-register">
 <a class="skip-link" href="#main">Skip to the form</a>
@@ -151,7 +151,7 @@
             <span class="reg-card__num">02</span>
             <span class="reg-card__title">Your <em>player</em></span>
           </legend>
-          <p class="reg-card__intro">Birthdate and current team age group help us place your player in the right group. Session times are assigned after registration.</p>
+          <p class="reg-card__intro">Birthdate and current team age group help us place your player in the right group.</p>
 
           <div class="reg-grid">
             <div class="field">
@@ -163,10 +163,15 @@
               <input id="playerLastName" name="player_last_name" type="text" autocomplete="off" required maxlength="60">
             </div>
 
-            <div class="field">
-              <label for="birthdate">Birthdate</label>
-              <input id="birthdate" name="player_birthdate" type="text" inputmode="numeric" autocomplete="off" required maxlength="10" placeholder="DD/MM/YYYY" data-min="2006-01-01" data-max="2021-12-31">
-            </div>
+            <fieldset class="field birth-field">
+              <legend>Birthdate</legend>
+              <input id="birthdate" name="player_birthdate" type="hidden" data-min="2006-01-01" data-max="2021-12-31">
+              <div class="birth-row">
+                <div class="birth-row__part"><label class="sr-only" for="birthMonth">Birth month</label><select id="birthMonth" data-dropdown><option value="">Month</option><option value="01">January</option><option value="02">February</option><option value="03">March</option><option value="04">April</option><option value="05">May</option><option value="06">June</option><option value="07">July</option><option value="08">August</option><option value="09">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select></div>
+                <div class="birth-row__part"><label class="sr-only" for="birthDay">Birth day</label><select id="birthDay" data-dropdown><option value="">Day</option><option value="01">1</option><option value="02">2</option><option value="03">3</option><option value="04">4</option><option value="05">5</option><option value="06">6</option><option value="07">7</option><option value="08">8</option><option value="09">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select></div>
+                <div class="birth-row__part"><label class="sr-only" for="birthYear">Birth year</label><select id="birthYear" data-dropdown><option value="">Year</option><option value="2021">2021</option><option value="2020">2020</option><option value="2019">2019</option><option value="2018">2018</option><option value="2017">2017</option><option value="2016">2016</option><option value="2015">2015</option><option value="2014">2014</option><option value="2013">2013</option><option value="2012">2012</option><option value="2011">2011</option><option value="2010">2010</option><option value="2009">2009</option><option value="2008">2008</option><option value="2007">2007</option><option value="2006">2006</option></select></div>
+              </div>
+            </fieldset>
             <div class="field">
               <label for="teamAge">Current team age group</label>
               <select id="teamAge" name="player_team_age_group" required data-dropdown>
@@ -230,7 +235,7 @@
 
           <fieldset class="field choice field--full" id="extendedCareGroup">
             <legend>Extended care</legend>
-            <p class="field__hint">Optional, $100: drop-off from 7:30am, pick-up until 5:30pm.</p>
+            <p class="field__hint">Optional, $100: drop-off from 7:30am, pick-up until 5:30pm on Mon–Tue–Wed.</p>
             <div class="choice__row">
               <label class="choice__opt"><input type="radio" name="extended_care" value="No" checked><span>No</span></label>
               <label class="choice__opt"><input type="radio" name="extended_care" value="Yes"><span>Yes (+$100)</span></label>
@@ -307,7 +312,7 @@
             <dl class="register-card__details">
               <div><dt>Dates</dt><dd>Sat Nov 21 – Wed Nov 25</dd></div>
               <div><dt>Sessions</dt><dd>Sat–Sun 9:00am–12:00pm<br>Mon–Tue–Wed 9:00am–4:00pm, with lunch break 12:00–1:00pm</dd></div>
-              <div><dt>Extended care</dt><dd>Optional, $100: drop-off from 7:30am, pick-up until 5:30pm</dd></div>
+              <div><dt>Extended care</dt><dd>Optional, $100: drop-off from 7:30am, pick-up until 5:30pm on Mon–Tue–Wed</dd></div>
               <div><dt>Lunch</dt><dd>Due to allergy and dietary concerns, pack your own lunch. Beverages and hydration are provided throughout the camp.</dd></div>
               <div><dt>Venue</dt><dd>Robert L. Taylor Community Complex<br>1845 34th St, Sarasota, FL 34234</dd></div>
               <div><dt>Who</dt><dd>Girls &amp; boys U8–U17 · max 16 per group</dd></div>
@@ -358,7 +363,7 @@
 
 <script src="https://js.stripe.com/v3/"></script>
 <script src="js/main.js"></script>
-<script src="js/register.js"></script>
+<script src="js/register.js?v=20261109"></script>
 <script src="js/semkhor.js"></script>
 </body>
 </html>

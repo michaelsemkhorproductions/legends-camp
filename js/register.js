@@ -97,7 +97,7 @@
     function render() {
       var o = sel.options[sel.selectedIndex];
       var has = !!sel.value;
-      valueEl.textContent = has ? o.textContent : "Select…";
+      valueEl.textContent = has ? o.textContent : sel.options[0].textContent;
       btn.classList.toggle("is-placeholder", !has);
       opts.forEach(function (li) { li.setAttribute("aria-selected", li.getAttribute("data-value") === sel.value ? "true" : "false"); });
     }
@@ -236,6 +236,7 @@
     if (el.type === "radio") {
       return form.querySelector('input[name="' + name + '"]:checked') ? "" : "Please choose one.";
     }
+    if (name === "player_birthdate" && !isoComplete(v)) return "Please choose the month, day and year.";
     if (!v) return el.tagName === "SELECT" ? "Please choose an option." : "Please fill this in.";
     if (name === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) return "Enter an email like name@example.com.";
     if (name === "zip" && !/^\d{5}(-\d{4})?$/.test(v)) return "Enter a 5-digit ZIP code.";
@@ -244,36 +245,32 @@
       if (!(d.length === 10 || (d.length === 11 && d.charAt(0) === "1"))) return "Enter a 10-digit US mobile number.";
     }
     if (name === "player_birthdate") {
-      var iso = dmyToIso(v);
-      if (!iso) {
-        return /^\d{2}\/\d{2}\/\d{4}$/.test(v)
-          ? "That date doesn’t exist. Check the day and month (DD/MM/YYYY)."
-          : "Enter the date as DD/MM/YYYY, for example 09/03/2014.";
-      }
+      if (!isRealDate(v)) return "That date doesn’t exist. Check the month and day.";
+      var iso = v;
       if (iso < el.getAttribute("data-min") || iso > el.getAttribute("data-max")) return "Please check the birthdate. Is the year right?";
     }
     return "";
   }
 
-  // "DD/MM/YYYY" -> "YYYY-MM-DD", or "" if it isn't a real calendar date.
-  function dmyToIso(v) {
-    var m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(String(v).trim());
-    if (!m) return "";
-    var d = +m[1], mo = +m[2], y = +m[3];
-    var dt = new Date(Date.UTC(y, mo - 1, d));
-    if (dt.getUTCFullYear() !== y || dt.getUTCMonth() !== mo - 1 || dt.getUTCDate() !== d) return "";
-    return m[3] + "-" + m[2] + "-" + m[1];
+  // Birthdate is three dropdowns (month by name, day, year) that fill one
+  // hidden YYYY-MM-DD field, so the value sent to Semkhor is unchanged.
+  function isoComplete(v) { return /^\d{4}-\d{2}-\d{2}$/.test(String(v)); }
+  function isRealDate(v) {
+    var p = String(v).split("-").map(Number);
+    var dt = new Date(Date.UTC(p[0], p[1] - 1, p[2]));
+    return dt.getUTCFullYear() === p[0] && dt.getUTCMonth() === p[1] - 1 && dt.getUTCDate() === p[2];
   }
-
-  // Birthdate: type digits only, slashes are added as you go (DD/MM/YYYY).
   var birth = document.getElementById("birthdate");
-  if (birth) {
-    birth.addEventListener("input", function () {
-      var d = digits(birth.value).slice(0, 8);
-      var out = d.slice(0, 2);
-      if (d.length > 2) out += "/" + d.slice(2, 4);
-      if (d.length > 4) out += "/" + d.slice(4);
-      if (out !== birth.value) birth.value = out;
+  var birthParts = ["birthMonth", "birthDay", "birthYear"].map(function (id) { return document.getElementById(id); });
+  if (birth && birthParts.every(Boolean)) {
+    birth._ddButton = birthParts[0]._ddButton;   // error links focus the Month dropdown
+    birthParts.forEach(function (part) {
+      part.addEventListener("change", function () {
+        var m = birthParts[0].value, d = birthParts[1].value, y = birthParts[2].value;
+        birth.value = m && d && y ? y + "-" + m + "-" + d : "";
+        var wrap = fieldWrap(birth);
+        if (birth.value || (wrap && wrap.classList.contains("is-invalid"))) setError(birth, birth.value ? messageFor(birth) : "Please choose the month, day and year.");
+      });
     });
   }
 
@@ -358,7 +355,6 @@
     var fd = new FormData(form);
     var data = {};
     Object.keys(LABELS).forEach(function (k) { data[k] = String(fd.get(k) || "").trim(); });
-    data.player_birthdate = dmyToIso(data.player_birthdate);   // sent as YYYY-MM-DD
     data.email = data.email.toLowerCase();
     data.state = data.state.toUpperCase();
     var d = digits(data.mobile_phone);
