@@ -351,6 +351,15 @@
     if (wrap && wrap.classList.contains("is-invalid")) setError(el, messageFor(el));
   });
 
+  // ?player=goalkeeper or ?player=field (from the homepage program buttons)
+  // preselects Player type. Parents can still change it.
+  var wantedPlayer = (/(?:^|[?&])player=(goalkeeper|field)(?:&|$)/i.exec(window.location.search) || [])[1];
+  if (wantedPlayer) {
+    var playerValue = wantedPlayer.toLowerCase() === "goalkeeper" ? "Goalkeeper" : "Field Player";
+    var playerRadio = form.querySelector('input[name="player_position"][value="' + playerValue + '"]');
+    if (playerRadio) playerRadio.checked = true;
+  }
+
   function collect() {
     var fd = new FormData(form);
     var data = {};

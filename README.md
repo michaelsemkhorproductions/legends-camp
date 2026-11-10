@@ -1,5 +1,22 @@
 # The Legends Camp — site
 
+## 2026-11-10 — Real Madrid comparison round (Jeff): $495, first-screen offer, programs
+
+- **Price $495** everywhere (+$100 extended care = $595). The charge comes from the Semkhor event:
+  set it to a flat $495 (no date rules) before or with deploying. `semkhor.js` no longer has a $695
+  fallback: if the event gives no usable price the form shows "Price unavailable" and pauses.
+  The payment box shows "Loading price…" until the event price arrives.
+- First screen: dates, schedule, venue, price + jersey, Register, "Questions before booking? Text us";
+  compact countdown. On phones the offer comes before the coach photos.
+- New `#programs` section: field players vs goalkeepers, each with its own button:
+  `register.html?player=field` / `?player=goalkeeper` preselects Player type.
+- Page order: offer → David video + coaching carousel → programs → coaches → the camp → what's included
+  → register card → FAQ → full gallery.
+- **Unconfirmed copy** is in the page with `data-proposed` and stays hidden: the five coach teaching
+  points and FAQ placeholders for cancellation/refunds, weather and injuries. Open the site with
+  `?review=1` to see them, outlined and labelled "Proposed". To publish one, write the final text and
+  remove `data-proposed hidden` from that element.
+
 ## 2026-11-10 — $499 launch price, hero details, coaching carousel (Jeff)
 
 Page copy now shows a flat **$499 launch price** (+$100 optional extended care = $599); the early-bird

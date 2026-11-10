@@ -13,9 +13,10 @@
   // The live form's shirt field code differs from the lab form.
   var SHIRT_CODE = IS_DEV ? "_Playertshirtsize" : "_PlayerTshirtSize";
 
-  // Flat fallback when the event has no usable price. Date rules from the
-  // event query override this (early bird is $595 before 11/08/2026).
-  var registrationCost = 695;
+  // The price always comes from the Semkhor event (flat price or date rules).
+  // There is deliberately no hard-coded fallback: if the event gives no usable
+  // price, registration stops instead of charging a guessed amount.
+  var registrationCost = null;
   var pricingSnapshot = null;
   var cardComplete = false;
   var stripe = null;
@@ -109,7 +110,7 @@
   }
 
   function priceFromPricing(pricing) {
-    var price = 695;
+    var price = null;
     var flat = Number(pricing && pricing.registration_cost);
     if (flat > 0) price = Math.round(flat * 100) / 100;
 
@@ -277,6 +278,10 @@
       }
       pricingSnapshot = result.registration.pricing || {};
       registrationCost = priceFromPricing(pricingSnapshot);
+      if (!(registrationCost > 0)) {
+        registrationCost = null;
+        throw new Error("The camp price could not be loaded, so registration is paused. Please text us at 941-725-5881.");
+      }
       showPrice(registrationCost);
     });
   }
@@ -285,13 +290,19 @@
   if (regForm) {
     regForm.addEventListener("change", function (e) {
       if (e.target.name !== "extended_care") return;
+      if (registrationCost === null) return;   // still loading, or unavailable
       showPrice(totalFee({ extended_care: e.target.value }));
     });
   }
 
   var configReady = loadConfig();
   configReady.catch(function (err) {
-    setStatus((err && err.message) || "Registration details could not be loaded.");
+    var priceEl = document.getElementById("payTotalAmount");
+    if (priceEl) priceEl.textContent = "Price unavailable";
+    // Our own "price could not be loaded" message is specific; anything else
+    // (offline, server down) gets one plain message instead of a raw error.
+    var msg = err && err.message;
+    setStatus(msg && msg.indexOf("price could not be loaded") >= 0 ? msg : "Registration is unavailable right now, so nothing was charged. Please refresh the page, or text us at 941-725-5881.");
   });
 
   window.LegendsRegistration = window.LegendsRegistration || {};

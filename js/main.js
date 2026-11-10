@@ -50,6 +50,13 @@
     syncArrows();
   }
 
+  // Copy that is waiting for Jeff's approval is in the page with data-proposed
+  // and stays hidden. Add ?review=1 to the address to see it, marked "Proposed".
+  if (/(?:^|[?&])review=1(?:&|$)/.test(window.location.search)) {
+    document.documentElement.classList.add("is-review");
+    document.querySelectorAll("[data-proposed]").forEach(function (el) { el.hidden = false; });
+  }
+
   // Mobile nav toggle
   var toggle = document.getElementById("navToggle");
   var nav = document.getElementById("siteNav");

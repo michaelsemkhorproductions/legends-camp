@@ -733,3 +733,66 @@ em { font-family: var(--font-accent); font-style: italic; font-weight: 400; lett
   border-radius: 999px; background: var(--gold); color: var(--navy-950); font-size: .8rem; font-weight: 800;
 }
 .gallery-toggle[aria-expanded="true"] .gallery-toggle__count { display: none; }
+
+
+/* ---- 2026-11-10: Real Madrid comparison round ---- */
+/* First screen: the offer panel (dates, schedule, venue, price, register) comes before the coach photos on phones. */
+.hero__panel--offer .glance--offer { grid-template-columns: 1fr 1fr; }
+.hero__panel--offer .glance--offer > div:nth-child(-n+2) { grid-column: auto; }
+.hero__panel--offer .glance--offer > div:nth-child(3) { grid-column: 1 / -1; }
+.hero__panel--offer .glance dd { font-size: .95rem; }
+.hero__register { display: flex; margin-top: .75rem; }
+.hero__register .btn-split__label { flex: 1; justify-content: center; }
+.hero__panel--offer .hero__text-us { margin-top: .5rem; }
+.countdown--compact { margin: .6rem 0 0; padding: 0; border: 0; }
+.countdown__line { display: table; margin: 0; padding: .3rem .6rem; border-radius: var(--radius-sm); background: rgba(5,15,30,.86); color: #c3ccda; font-size: .78rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.countdown__line span { color: #fff; }
+@media (max-width: 979px) {
+  .hero--v2 .hero__panel { order: 2; }
+  .hero--v2 .hero__coach-banner { order: 3; }
+}
+@media (max-width: 639px) {
+  .hero--v2 .hero__copy .chip { display: none; }
+  .hero--v2 .hero__lede { font-size: .98rem; margin-top: .8rem; }
+  .hero--v2 .hero__inner, .hero--v2 { padding-top: 20px; }
+}
+
+/* Programs: field players and goalkeepers */
+.programs { background: var(--paper); }
+.program-grid { display: grid; gap: 1rem; }
+.program { display: flex; flex-direction: column; gap: .7rem; padding: 1.6rem 1.5rem; border-radius: var(--radius); background: var(--white); border: 1px solid var(--line); }
+.program--gk { background: var(--navy-950); border-color: var(--navy-950); color: #fff; }
+.program__label { margin: 0; font-size: .78rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold-deep); }
+.program--gk .program__label { color: var(--gold); }
+.program h3 { font-size: 1.35rem; }
+.program p { margin: 0; color: var(--muted); }
+.program--gk p:not(.program__label) { color: #dfe5ee; }
+.program__facts { margin: .2rem 0 .4rem; padding-left: 1.1rem; display: grid; gap: .3rem; font-weight: 600; }
+.program__cta { align-self: flex-start; margin-top: auto; }
+@media (min-width: 760px) { .program-grid { grid-template-columns: 1fr 1fr; } }
+
+/* Coach teaching points (proposed, hidden until approved) and review mode */
+.coach-card__focus { margin: .45rem 0 0; font-size: .85rem; line-height: 1.45; color: #e3e8ef; }
+.is-review [data-proposed] { outline: 2px dashed #f6bc17; outline-offset: 3px; }
+.is-review [data-proposed]::before { content: "Proposed – needs Jeff’s approval"; display: block; font-size: .7rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #f6bc17; margin-bottom: .2rem; }
+
+/* Register card: text link under the button */
+.register-card__text { display: inline-block; margin-top: .9rem; color: var(--gold); font-weight: 700; text-decoration-color: rgba(246,188,23,.5); text-underline-offset: 3px; }
+/* Phones: the whole offer, including Register, fits on the first screen. */
+@media (max-width: 639px) {
+  .hero--v2 .hero__grid { row-gap: .9rem; }
+  .hero--v2 h1 { font-size: clamp(1.75rem, 7.6vw, 2.15rem); line-height: 1.04; }
+  .hero--v2 .hero__lede { font-size: .9rem; line-height: 1.45; margin: .55rem 0 0; }
+  .hero__panel--offer { padding: 0; }
+  .hero__panel--offer .glance--offer { display: grid; grid-template-columns: 1fr; gap: 0; padding: .2rem .8rem; border-radius: var(--radius-sm); background: rgba(5,15,30,.9); }
+  .hero__panel--offer .glance--offer > div,
+  .hero__panel--offer .glance--offer > div:nth-child(3) { grid-column: auto; display: grid; grid-template-columns: 4.6rem 1fr; align-items: baseline; gap: .5rem; padding: .42rem 0; background: none; border-radius: 0; border-bottom: 1px solid rgba(255,255,255,.1); }
+  .hero__panel--offer .glance--offer > div:last-child { border-bottom: 0; }
+  .hero__panel--offer .glance dt { font-size: .64rem; }
+  .hero__panel--offer .glance dd { margin: 0; font-size: .86rem; line-height: 1.3; }
+  .hero__panel--offer .glance dd span { margin-top: .05rem; font-size: .8rem; }
+  .hero__register { margin-top: .6rem; }
+  .hero__register .btn-split__label, .hero__register .btn-split__icon { height: 50px; }
+  .hero__register .btn-split__icon { width: 50px; }
+  .hero__panel--offer .hero__text-us { min-height: 40px; margin-top: .4rem; padding: .35rem .8rem; font-size: .88rem; }
+}

@@ -22,7 +22,7 @@
 <meta name="twitter:image" content="https://thelegendscamp.com/images/share-david-ronaldo.jpg">
 
 <link rel="icon" type="image/svg+xml" href="images/logo-dark.svg">
-<link rel="stylesheet" href="css/styles.css?v=20261110c">
+<link rel="stylesheet" href="css/styles.css?v=20261110rm">
 <link rel="stylesheet" href="css/register.css?v=20261109c">
 </head>
 <body class="page-register">
@@ -61,7 +61,7 @@
       <a class="reg-back" href="index.html"><span aria-hidden="true">←</span> Back to the camp</a>
       <p class="chip chip--dark"><span class="chip__dot" aria-hidden="true"></span>November 21–25, 2026 · Sarasota, FL</p>
       <h1>Register your <em>player</em></h1>
-      <p class="reg-hero__lede">Groups are capped at 16 players. Fill in your details and your player’s, then complete payment to secure the spot.</p>
+      <p class="reg-hero__lede">Groups are capped at 16 field players or 8 goalkeepers. Fill in your details and your player’s, then complete payment to secure the spot.</p>
       <ol class="reg-steps" aria-label="Registration steps">
         <li><a href="#step-parent" data-step="step-parent"><span>01</span>Parent or guardian</a></li>
         <li><a href="#step-player" data-step="step-player"><span>02</span>Player</a></li>
@@ -151,7 +151,7 @@
             <span class="reg-card__num">02</span>
             <span class="reg-card__title">Your <em>player</em></span>
           </legend>
-          <p class="reg-card__intro">Birthdate and current team age group help us place your player in the right group.</p>
+          <p class="reg-card__intro">Sessions run Sat–Sun 9am–noon and Mon–Wed 9am–4pm. We place players in groups by age, using the birthdate and current team age group below; goalkeepers train in their own group.</p>
 
           <div class="reg-grid">
             <div class="field">
@@ -235,7 +235,7 @@
 
           <fieldset class="field choice field--full" id="extendedCareGroup">
             <legend>Extended care</legend>
-            <p class="field__hint">Optional, $100: drop-off from 7:30am, pick-up until 5:30pm on Mon–Tue–Wed.</p>
+            <p class="field__hint">Optional, $100 per player. Covers Mon–Tue–Wed (Nov 23–25): drop-off from 7:30am and pick-up until 5:30pm, around the 9am–4pm sessions.</p>
             <div class="choice__row">
               <label class="choice__opt"><input type="radio" name="extended_care" value="No" checked><span>No</span></label>
               <label class="choice__opt"><input type="radio" name="extended_care" value="Yes"><span>Yes (+$100)</span></label>
@@ -244,7 +244,7 @@
 
           <div class="pay-total">
             <span>The Legends Camp · 1 player</span>
-            <strong id="payTotalAmount">$499.00</strong>
+            <strong id="payTotalAmount" aria-live="polite">Loading price…</strong>
           </div>
 
           <div class="pay-element is-placeholder" id="payment-element">
@@ -291,7 +291,7 @@
               <span class="btn-split__label">Complete registration</span>
               <span class="btn-split__icon" aria-hidden="true">→</span>
             </button>
-            <p class="reg-submit__note">Questions first? <a href="mailto:jeffrey@thelegendscamp.com">Email us</a> or text <a href="sms:+19417255881">941-725-5881</a>.</p>
+            <p class="reg-submit__note">Questions before booking? <a href="sms:+19417255881">Text us at 941-725-5881</a> or <a href="mailto:jeffrey@thelegendscamp.com">email us</a>.</p>
           </div>
 
           <p class="reg-status" id="regStatus" role="status" hidden></p>
@@ -304,16 +304,16 @@
           <div class="reg-summary__body">
             <img class="reg-summary__crest" src="images/logo-dark.svg" alt="" width="56" height="56">
             <p class="reg-summary__name">The Legends Camp</p>
-            <p class="price"><span class="price__amount">$499</span><span class="price__note">launch price, per player</span></p>
+            <p class="price"><span class="price__amount">$495</span><span class="price__note">per player</span></p>
             <p class="price-then">Camp jersey included!</p>
-            <p class="price-extra">Optional extended care +$100 (total $599)</p>
+            <p class="price-extra">Optional extended care Mon–Wed +$100 (total $595)</p>
             <dl class="register-card__details">
               <div><dt>Dates</dt><dd>Sat Nov 21 – Wed Nov 25</dd></div>
               <div><dt>Sessions</dt><dd>Sat–Sun 9:00am–12:00pm<br>Mon–Tue–Wed 9:00am–4:00pm, with lunch break 12:00–1:00pm</dd></div>
               <div><dt>Extended care</dt><dd>Optional, $100: drop-off from 7:30am, pick-up until 5:30pm on Mon–Tue–Wed</dd></div>
               <div><dt>Lunch</dt><dd>Due to allergy and dietary concerns, pack your own lunch. Beverages and hydration are provided throughout the camp.</dd></div>
               <div><dt>Venue</dt><dd>Robert L. Taylor Community Complex<br>1845 34th St, Sarasota, FL 34234</dd></div>
-              <div><dt>Who</dt><dd>Girls &amp; boys U8–U17 · max 16 per group</dd></div>
+              <div><dt>Who</dt><dd>Girls &amp; boys U8–U17 · max 16 field players or 8 goalkeepers per group</dd></div>
             </dl>
           </div>
         </div>
@@ -360,8 +360,8 @@
 </footer>
 
 <script src="https://js.stripe.com/v3/"></script>
-<script src="js/main.js?v=20261110"></script>
-<script src="js/register.js?v=20261109"></script>
-<script src="js/semkhor.js"></script>
+<script src="js/main.js?v=20261110rm"></script>
+<script src="js/register.js?v=20261110rm"></script>
+<script src="js/semkhor.js?v=20261110rm"></script>
 </body>
 </html>
