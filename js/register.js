@@ -382,6 +382,8 @@
   }
 
   function showSuccess(data) {
+    var total = parseFloat((document.getElementById("payTotalAmount") || {}).textContent.replace(/[^0-9.]/g, ""));
+    if (window.legendsTrack) window.legendsTrack("registration_paid", total > 0 ? { currency: "USD", value: total } : {});
     document.getElementById("regSuccessName").textContent = data.parent_first_name;
     document.getElementById("regSuccessEmail").textContent = data.email;
     document.body.classList.add("is-registered");
@@ -389,6 +391,13 @@
     success.focus();
     success.scrollIntoView({ behavior: "smooth", block: "start" });
   }
+
+  var began = false;
+  form.addEventListener("change", function () {
+    if (began) return;
+    began = true;
+    if (window.legendsTrack) window.legendsTrack("begin_registration");
+  });
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();

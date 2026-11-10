@@ -253,3 +253,13 @@ by Jeff directly.
   screen reader.
 - Not tested served from an actual subpath (e.g. `/the-legends-camp/`) —
   all paths are relative, so it should work, but hasn't been verified live.
+
+## Tracking (ready, switched off)
+
+`js/track.js` holds Google Analytics 4, loaded on both pages. It does nothing until
+`GA_MEASUREMENT_ID` is set to Jeff's ID (`G-...`). Once set it records page views (with any
+`utm_` campaign tags on the link), `register_click` (home-page Register buttons, with where on
+the page and field/goalkeeper), `begin_registration` (first change to the form) and
+`registration_paid` (after a successful payment, with the total). No names, emails or other
+personal details are sent. Campaign links should carry tags, e.g.
+`https://thelegendscamp.com/?utm_source=instagram&utm_medium=social&utm_campaign=camp2026`.
