@@ -1,27 +1,34 @@
 (function () {
   "use strict";
 
-  // *.semlab.test uses the lab API and the sandbox Stripe key. Every other host,
-  // including the live site, uses the Legends Camp production account.
+  // Any host on *.semlab.test hits that same host’s API (site01, site08, …) with the
+  // lab client/event. Production uses legendscamp + live Stripe on all other hosts.
   var IS_DEV = /\.semlab\.test$/i.test(window.location.hostname);
-  var API = IS_DEV ? "https://site01.semlab.test/api/" : "https://www.semkhor.com/api/";
+  var API = IS_DEV
+    ? window.location.protocol + "//" + window.location.hostname + "/api/"
+    : "https://www.semkhor.com/api/";
   var CLIENT_CODE = IS_DEV ? "abctooldyeco" : "legendscamp";
   var EVENT_ID = IS_DEV ? 70782 : 49762;
   var STRIPE_KEY = IS_DEV
     ? "pk_test_51SNvEuDsMwG2Us15PsCrXPvBuvlXRYudnUdBtNNcuKhKmYKwtjwAhM4gYEVck3QMuoQuzGO0edwn4vyDiCspPQfG00LiBw1aHp"
     : "pk_live_51USn01C02ppokKCQT3lhkQk6AMvwZQIhcVe17d2k7vfNIEHMjiANhe1vNw6Qb03L8SRRKarEKOXdzZK1gyO6oHh700DDS6Ybut";
-  // The live form's shirt field code differs from the lab form.
   var SHIRT_CODE = IS_DEV ? "_Playertshirtsize" : "_PlayerTshirtSize";
 
-  // The price always comes from the Semkhor event (flat price or date rules).
-  // There is deliberately no hard-coded fallback: if the event gives no usable
-  // price, registration stops instead of charging a guessed amount.
   var registrationCost = null;
   var pricingSnapshot = null;
   var cardComplete = false;
   var stripe = null;
   var cardElement = null;
-  // ?xstripe=1 (any non-blank value) skips Stripe and posts card fields to Semkhor.
+  var promoState = {
+    code: "",
+    applied: false,
+    discount: 0,
+    chargeTotal: null,
+    status: "",
+    message: ""
+  };
+  var promoBlurTimer = null;
+
   var testCardMode = (function () {
     var match = /(?:^|[?&])xstripe=([^&]*)/.exec(window.location.search || "");
     if (!match) return false;
@@ -49,14 +56,6 @@
     el.hidden = !text;
   }
 
-  function showPrice(amount) {
-    var el = document.getElementById("payTotalAmount");
-    if (!el) return;
-    el.textContent = money(amount);
-  }
-
-  // Calendar date in Eastern time, as YYYYMMDD. "before 11/08/2026" means
-  // through 11:59pm on Nov 7 in Sarasota.
   function easternDateKey(date) {
     var parts = new Intl.DateTimeFormat("en-US", {
       timeZone: "America/New_York",
@@ -75,9 +74,6 @@
     return year * 10000 + month * 100 + day;
   }
 
-  // Semkhor match strings look like "_RegistrationDate=before 11/08/2026|^|".
-  // Clauses are separated by |^|. Every clause has to match; a clause we
-  // don't understand keeps the rule from applying.
   var DATE_CLAUSE = /^_?RegistrationDate\s*=\s*(on or before|on or after|before|after|on)\s+(\d{1,2})\/(\d{1,2})\/(\d{4})$/i;
 
   function dateClauseMatches(clause, todayKey) {
@@ -139,9 +135,74 @@
     return choice === "Yes" ? 100 : 0;
   }
 
-  function totalFee(data) {
+  function registrantSubtotal(data) {
     var care = (data && data.extended_care) || "No";
+    if (registrationCost === null) return 0;
     return registrationCost + extendedCareAddOn(pricingSnapshot, care);
+  }
+
+  function showPrice(amount) {
+    var el = document.getElementById("payTotalAmount");
+    if (!el) return;
+    el.textContent = money(amount);
+  }
+
+  function updatePriceDisplay(data) {
+    var subtotal = registrantSubtotal(data);
+    var lineEl = document.getElementById("payPromoLine");
+    if (promoState.applied && promoState.chargeTotal != null) {
+      showPrice(promoState.chargeTotal);
+      if (lineEl) {
+        lineEl.hidden = false;
+        if (promoState.discount > 0) {
+          lineEl.textContent = "Subtotal " + money(subtotal) + " · Promo −" + money(promoState.discount);
+        } else {
+          lineEl.textContent = "Subtotal " + money(subtotal);
+        }
+      }
+    } else {
+      showPrice(subtotal);
+      if (lineEl) {
+        lineEl.hidden = true;
+        lineEl.textContent = "";
+      }
+    }
+  }
+
+  function setPromoMessage(text, kind) {
+    var el = document.getElementById("promoMessage");
+    if (!el) return;
+    el.textContent = text || "";
+    el.hidden = !text;
+    el.classList.remove("is-success", "is-error");
+    if (text && kind === "success") el.classList.add("is-success");
+    if (text && kind === "error") el.classList.add("is-error");
+  }
+
+  function resetPromoState() {
+    promoState = {
+      code: "",
+      applied: false,
+      discount: 0,
+      chargeTotal: null,
+      status: "",
+      message: ""
+    };
+  }
+
+  function getCollectFn() {
+    var LR = window.LegendsRegistration;
+    return LR && typeof LR.collect === "function" ? LR.collect : null;
+  }
+
+  function promoPrereqsMet(data) {
+    return !!(
+      data.parent_first_name &&
+      data.parent_last_name &&
+      data.email &&
+      data.player_first_name &&
+      data.player_last_name
+    );
   }
 
   function apiPost(path, body) {
@@ -176,23 +237,23 @@
     return lines.join(" ");
   }
 
-  function buildPayload(data, fee, editId, paymentId, wantIntent, card) {
+  function buildPayload(data, feeTotal, editId, paymentId, wantIntent, card, promoCode) {
+    var subtotal = registrantSubtotal(data);
     var body = {
       event_id: EVENT_ID,
       session: "",
-      discount_promo: 0,
-      discount_promoCode: "",
       discount_quantity: 0,
       surcharges: [],
-      fee_total: fee,
+      promo_code: promoCode || "",
+      fee_total: feeTotal,
       cc_auth: paymentId || "",
       pay_currency: "USD",
       payment_intent: wantIntent ? "stripe" : "",
       registrants: [
         {
           edit_id: editId || 0,
-          fee: fee,
-          fee_note: "Registration|^|" + Number(fee).toFixed(2),
+          fee: subtotal,
+          fee_note: "Registration|^|" + Number(subtotal).toFixed(2),
           first_name: data.parent_first_name,
           last_name: data.parent_last_name,
           address: data.address,
@@ -214,7 +275,7 @@
       ]
     };
     body.registrants[0][SHIRT_CODE] = SHIRTS[data.player_tshirt_size] || data.player_tshirt_size;
-    if (!IS_DEV && data.player_position) {
+    if (data.player_position) {
       body.registrants[0]._PlayerPosition = data.player_position;
     }
     if (card) {
@@ -226,6 +287,143 @@
       body.payment_intent = "";
     }
     return body;
+  }
+
+  function applyPromoFromReview(data, code, reg) {
+    var discount = Number(reg && reg.discount_promo) || 0;
+    var total = Number(reg && reg.fee_total);
+    if (!(total >= 0)) total = Math.max(0, registrantSubtotal(data) - discount);
+    promoState.code = code;
+    promoState.applied = true;
+    promoState.discount = discount;
+    promoState.chargeTotal = Math.round(total * 100) / 100;
+    promoState.status = reg.promo_status || "";
+    promoState.message = reg.promo_message || "";
+    updatePriceDisplay(data);
+    if (reg.promo_status === "ok" && discount > 0) {
+      setPromoMessage(reg.promo_message || "Promo applied.", "success");
+    } else if (reg.promo_status === "ok") {
+      setPromoMessage(reg.promo_message || "This code is valid but does not change your total.", "success");
+    } else if (reg.promo_message) {
+      setPromoMessage(reg.promo_message, "success");
+    } else {
+      setPromoMessage("", "");
+    }
+  }
+
+  function runPromoReview(data, code) {
+    if (!code) {
+      resetPromoState();
+      setPromoMessage("", "");
+      updatePriceDisplay(data);
+      return Promise.resolve();
+    }
+    if (!promoPrereqsMet(data)) {
+      setPromoMessage(
+        "Fill in parent and player names and email first, then apply your promo code.",
+        "error"
+      );
+      return Promise.reject(new Error("Complete parent and player details before applying a promo code."));
+    }
+    var subtotal = registrantSubtotal(data);
+    var body = buildPayload(data, subtotal, 0, "", false, null, code);
+    return apiPost("register/review", body).then(function (result) {
+      var message = apiError(result);
+      var reg = result && result.registration;
+      if (!result || !result.success || message) {
+        resetPromoState();
+        updatePriceDisplay(data);
+        var errText = message || "That promo code could not be applied.";
+        setPromoMessage(errText, "error");
+        throw new Error(errText);
+      }
+      applyPromoFromReview(data, code, reg);
+      return reg;
+    });
+  }
+
+  function chargeTotalForSubmit(data) {
+    if (promoState.applied && promoState.chargeTotal != null) {
+      return promoState.chargeTotal;
+    }
+    return registrantSubtotal(data);
+  }
+
+  function ensurePromoBeforePay(data) {
+    var input = document.getElementById("promoCode");
+    var code = input ? String(input.value || "").replace(/^\s+|\s+$/g, "") : "";
+    if (!code) {
+      resetPromoState();
+      updatePriceDisplay(data);
+      return Promise.resolve(chargeTotalForSubmit(data));
+    }
+    if (promoState.applied && promoState.code === code && promoState.chargeTotal != null) {
+      return Promise.resolve(promoState.chargeTotal);
+    }
+    return runPromoReview(data, code).then(function () {
+      return chargeTotalForSubmit(data);
+    });
+  }
+
+  function wirePromoControls() {
+    var input = document.getElementById("promoCode");
+    var btn = document.getElementById("promoApply");
+    if (!input || !btn) return;
+
+    function setPromoBusy(busy) {
+      btn.disabled = busy;
+      btn.textContent = busy ? "Checking…" : "Apply";
+    }
+
+    function triggerApply() {
+      var collect = getCollectFn();
+      if (!collect) {
+        setPromoMessage("Registration is still loading. Try again in a moment.", "error");
+        return;
+      }
+      var code = String(input.value || "").replace(/^\s+|\s+$/g, "");
+      if (!code) {
+        resetPromoState();
+        setPromoMessage("", "");
+        var data = collect();
+        updatePriceDisplay(data);
+        return;
+      }
+      return configReady.then(function () {
+        setPromoBusy(true);
+        setPromoMessage("", "");
+        var data = collect();
+        return runPromoReview(data, code).catch(function () {
+          /* message already shown */
+        }).then(function () {
+          setPromoBusy(false);
+        });
+      });
+    }
+
+    btn.addEventListener("click", function () {
+      triggerApply();
+    });
+
+    input.addEventListener("blur", function () {
+      if (promoBlurTimer) clearTimeout(promoBlurTimer);
+      promoBlurTimer = setTimeout(function () {
+        var code = String(input.value || "").replace(/^\s+|\s+$/g, "");
+        if (!code) return;
+        if (promoState.applied && promoState.code === code) return;
+        triggerApply();
+      }, 200);
+    });
+
+    input.addEventListener("input", function () {
+      var code = String(input.value || "").replace(/^\s+|\s+$/g, "");
+      if (!code && promoState.applied) {
+        resetPromoState();
+        setPromoMessage("", "");
+        var collect = getCollectFn();
+        if (collect) updatePriceDisplay(collect());
+      }
+    });
   }
 
   function readTestCard() {
@@ -282,7 +480,8 @@
         registrationCost = null;
         throw new Error("The camp price could not be loaded, so registration is paused. Please text us at 941-725-5881.");
       }
-      showPrice(registrationCost);
+      var collect = getCollectFn();
+      updatePriceDisplay(collect ? collect() : { extended_care: "No" });
     });
   }
 
@@ -290,8 +489,16 @@
   if (regForm) {
     regForm.addEventListener("change", function (e) {
       if (e.target.name !== "extended_care") return;
-      if (registrationCost === null) return;   // still loading, or unavailable
-      showPrice(totalFee({ extended_care: e.target.value }));
+      if (registrationCost === null) return;
+      var collect = getCollectFn();
+      if (!collect) return;
+      var data = collect();
+      var code = promoState.applied ? promoState.code : "";
+      if (code) {
+        runPromoReview(data, code).catch(function () { updatePriceDisplay(data); });
+      } else {
+        updatePriceDisplay(data);
+      }
     });
   }
 
@@ -299,86 +506,88 @@
   configReady.catch(function (err) {
     var priceEl = document.getElementById("payTotalAmount");
     if (priceEl) priceEl.textContent = "Price unavailable";
-    // Our own "price could not be loaded" message is specific; anything else
-    // (offline, server down) gets one plain message instead of a raw error.
     var msg = err && err.message;
     setStatus(msg && msg.indexOf("price could not be loaded") >= 0 ? msg : "Registration is unavailable right now, so nothing was charged. Please refresh the page, or text us at 941-725-5881.");
   });
 
+  wirePromoControls();
+
   window.LegendsRegistration = window.LegendsRegistration || {};
   window.LegendsRegistration.submit = function (data) {
     return configReady.then(function () {
-      var fee = totalFee(data);
+      return ensurePromoBeforePay(data).then(function (fee) {
+        var promoCode = promoState.applied ? promoState.code : "";
 
-      if (testCardMode) {
-        var card = readTestCard();
-        if (card.problems.length) throw new Error(card.problems.join(" "));
-        setStatus("Saving your registration…");
-        return apiPost("register/add", buildPayload(data, fee, 0, "", false, card)).then(function (result) {
-          var message = apiError(result);
-          if (!result || !result.success || message) {
-            throw new Error(message || "Registration could not be completed.");
-          }
-          var txn = result.registration && result.registration.transaction_id;
-          if (!txn) {
-            throw new Error("Registration was not completed. The Semkhor test card is 4000200020002000.");
-          }
-        });
-      }
-
-      if (!stripe || !cardElement) {
-        throw new Error("Card payment could not be loaded. Please refresh the page, or email us.");
-      }
-      if (!cardComplete) {
-        throw new Error("Enter the card number, expiry, and security code.");
-      }
-
-      setStatus("Checking registration…");
-      return apiPost("register/add", buildPayload(data, fee, 0, "", true)).then(function (first) {
-        var firstError = apiError(first);
-        if (!first || !first.success || firstError) {
-          throw new Error(firstError || "Registration could not be checked. You were not charged.");
+        if (testCardMode) {
+          var card = readTestCard();
+          if (card.problems.length) throw new Error(card.problems.join(" "));
+          setStatus("Saving your registration…");
+          return apiPost("register/add", buildPayload(data, fee, 0, "", false, card, promoCode)).then(function (result) {
+            var message = apiError(result);
+            if (!result || !result.success || message) {
+              throw new Error(message || "Registration could not be completed.");
+            }
+            var txn = result.registration && result.registration.transaction_id;
+            if (!txn) {
+              throw new Error("Registration was not completed. The Semkhor test card is 4000200020002000.");
+            }
+          });
         }
 
-        var registrants = (first.registration && first.registration.registrants) || [];
-        var editId = Number((registrants[0] && registrants[0].registrantId) || 0);
-        var clientSecret = first.registration && first.registration.payment_intent;
-        if (!clientSecret) {
-          throw new Error("Payment could not be started. You were not charged.");
+        if (!stripe || !cardElement) {
+          throw new Error("Card payment could not be loaded. Please refresh the page, or email us.");
+        }
+        if (!cardComplete) {
+          throw new Error("Enter the card number, expiry, and security code.");
         }
 
-        setStatus("Confirming card payment…");
-        return stripe.confirmCardPayment(clientSecret, {
-          payment_method: {
-            card: cardElement,
-            billing_details: {
-              name: data.parent_first_name + " " + data.parent_last_name,
-              email: data.email,
-              phone: formatPhone(data.mobile_phone),
-              address: {
-                line1: data.address,
-                city: data.city,
-                state: data.state,
-                postal_code: data.zip,
-                country: "US"
+        setStatus("Checking registration…");
+        return apiPost("register/add", buildPayload(data, fee, 0, "", true, null, promoCode)).then(function (first) {
+          var firstError = apiError(first);
+          if (!first || !first.success || firstError) {
+            throw new Error(firstError || "Registration could not be checked. You were not charged.");
+          }
+
+          var registrants = (first.registration && first.registration.registrants) || [];
+          var editId = Number((registrants[0] && registrants[0].registrantId) || 0);
+          var clientSecret = first.registration && first.registration.payment_intent;
+          if (!clientSecret) {
+            throw new Error("Payment could not be started. You were not charged.");
+          }
+
+          setStatus("Confirming card payment…");
+          return stripe.confirmCardPayment(clientSecret, {
+            payment_method: {
+              card: cardElement,
+              billing_details: {
+                name: data.parent_first_name + " " + data.parent_last_name,
+                email: data.email,
+                phone: formatPhone(data.mobile_phone),
+                address: {
+                  line1: data.address,
+                  city: data.city,
+                  state: data.state,
+                  postal_code: data.zip,
+                  country: "US"
+                }
               }
             }
-          }
-        }).then(function (paymentResult) {
-          if (paymentResult.error) {
-            throw new Error(paymentResult.error.message || "The card was declined.");
-          }
-          var paymentId = paymentResult.paymentIntent && paymentResult.paymentIntent.id;
-          if (!paymentId) {
-            throw new Error("The payment did not return a confirmation. Please contact us before trying again.");
-          }
-
-          setStatus("Saving your registration…");
-          return apiPost("register/add", buildPayload(data, fee, editId, paymentId, false)).then(function (finalPass) {
-            var finalError = apiError(finalPass);
-            if (!finalPass || !finalPass.success || finalError) {
-              throw new Error(finalError || "The card was charged, but the registration could not be saved. Please contact us and do not submit again.");
+          }).then(function (paymentResult) {
+            if (paymentResult.error) {
+              throw new Error(paymentResult.error.message || "The card was declined.");
             }
+            var paymentId = paymentResult.paymentIntent && paymentResult.paymentIntent.id;
+            if (!paymentId) {
+              throw new Error("The payment did not return a confirmation. Please contact us before trying again.");
+            }
+
+            setStatus("Saving your registration…");
+            return apiPost("register/add", buildPayload(data, fee, editId, paymentId, false, null, promoCode)).then(function (finalPass) {
+              var finalError = apiError(finalPass);
+              if (!finalPass || !finalPass.success || finalError) {
+                throw new Error(finalError || "The card was charged, but the registration could not be saved. Please contact us and do not submit again.");
+              }
+            });
           });
         });
       });

@@ -8,7 +8,7 @@
   // cleared, or reject with an Error whose message is safe to show.
   // This file sends nothing and stores nothing.
   // ---------------------------------------------------------------------
-  window.LegendsRegistration = window.LegendsRegistration || { submit: null };
+  window.LegendsRegistration = window.LegendsRegistration || { submit: null, collect: null };
 
   var form = document.getElementById("registrationForm");
   if (!form) return;
@@ -370,6 +370,8 @@
     data.mobile_phone = d.length === 11 ? d.slice(1) : d;   // 10 digits, US
     return data;
   }
+
+  window.LegendsRegistration.collect = collect;
 
   function setBusy(busy) {
     submitBtn.disabled = busy;

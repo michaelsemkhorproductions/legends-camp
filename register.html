@@ -23,7 +23,7 @@
 
 <link rel="icon" type="image/svg+xml" href="images/logo-dark.svg">
 <link rel="stylesheet" href="css/styles.css?v=20261110rm">
-<link rel="stylesheet" href="css/register.css?v=20261109c">
+<link rel="stylesheet" href="css/register.css?v=20261116promo3">
 </head>
 <body class="page-register">
 <a class="skip-link" href="#main">Skip to the form</a>
@@ -242,6 +242,17 @@
             </div>
           </fieldset>
 
+          <div class="pay-promo field field--full">
+            <label for="promoCode">Promo code <span class="pay-promo__optional">(optional)</span></label>
+            <div class="pay-promo__row">
+              <input id="promoCode" name="promo_code" type="text" maxlength="50" autocomplete="off" spellcheck="false" placeholder="Enter code" aria-describedby="promoMessage">
+              <button type="button" class="btn btn--line pay-promo__apply" id="promoApply">Apply</button>
+            </div>
+            <p class="pay-promo__msg" id="promoMessage" role="status" aria-live="polite" hidden></p>
+          </div>
+
+          <p class="pay-promo-line" id="payPromoLine" hidden aria-live="polite"></p>
+
           <div class="pay-total">
             <span>The Legends Camp · 1 player</span>
             <strong id="payTotalAmount" aria-live="polite">Loading price…</strong>
@@ -363,6 +374,6 @@
 <script src="js/track.js?v=20261110t"></script>
 <script src="js/main.js?v=20261110rm"></script>
 <script src="js/register.js?v=20261110t"></script>
-<script src="js/semkhor.js?v=20261110rm"></script>
+<script src="js/semkhor.js?v=20261116pos"></script>
 </body>
 </html>
