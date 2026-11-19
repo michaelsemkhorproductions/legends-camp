@@ -8,9 +8,9 @@
   // ---------------------------------------------------------------------
   var REGISTER_URL = "register.html";
 
-  // Camp start for the countdown: Sat Nov 21, 2026, 9:00 AM Eastern
-  // (first session per the published schedule: Sat–Sun 9:00am–12:00pm).
-  var CAMP_START = new Date("2026-11-21T09:00:00-05:00").getTime();
+  // Camp start for the countdown: Mon Nov 23, 2026, 9:00 AM Eastern
+  // (first session: Mon–Wed 9:00am–4:00pm).
+  var CAMP_START = new Date("2026-11-23T09:00:00-05:00").getTime();
 
   document.documentElement.classList.add("js");
 
